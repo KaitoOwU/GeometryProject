@@ -1,16 +1,13 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "Maxime.h"
-#include "Kevin.h"
-#include "Tom.h"
+#include "Game.h"
+
 
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(800, 600), "ChronoSpacer");
     // Initialise everything below
-    InitializeKevin();
-    InitializeMaxime();
-    InitializeTom();
+
     // Game loop
     while (window.isOpen()) {
         sf::Event event;
@@ -34,9 +31,6 @@ int main()
         }
         window.clear();
         // Whatever I want to draw goes here
-        DrawKevin();
-        DrawTom();
-        DrawMaxime();
         window.display();
     }
 
