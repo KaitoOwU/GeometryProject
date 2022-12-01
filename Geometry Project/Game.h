@@ -1,8 +1,8 @@
 #pragma once
-#include "ParticleSystem.h"
-#include "Player.h"
 #include "EnemyManager.h"
 #include "InputManager.h"
+#include "ParticleSystem.h"
+#include "Player.h"
 
 class Game
 {
