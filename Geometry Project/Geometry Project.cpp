@@ -33,5 +33,4 @@ int main()
         // Whatever I want to draw goes here
         window.display();
     }
-
 }

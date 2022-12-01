@@ -1,5 +1,4 @@
 #pragma once
-
 class Particle
 {
 public:
@@ -9,3 +8,4 @@ public:
 private:
 
 };
+
