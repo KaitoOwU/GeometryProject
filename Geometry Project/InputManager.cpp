@@ -1,23 +1,32 @@
 #include "InputManager.h"
 
-void Input(sf::Event& event)
+InputManager::InputManager(Player* pPlayer)
 {
-	switch (event.key.code)
-	{
-	case sf::Keyboard::Z:
-		//MOVE TOP
-		return;
-	case sf::Keyboard::Q:
-		//MOVE LEFT
-		return;
-	case sf::Keyboard::S:
-		//MOVE BACK
-		return;
-	case sf::Keyboard::D:
-		//MOVE RIGHT
-		return;
-	case sf::Keyboard::Space:
-		//SHOOT
-		return;
+	this->pPlayer = pPlayer;
+}
+
+void InputManager::PressKey(sf::Event& event)
+{
+	if (event.key.code == sf::Keyboard::Z ||
+		event.key.code == sf::Keyboard::Q ||
+		event.key.code == sf::Keyboard::S ||
+		event.key.code == sf::Keyboard::D ||
+		event.key.code == sf::Keyboard::Space) {
+		this->inputs[event.key.code] = true;
 	}
+}
+
+void InputManager::ReleaseKey(sf::Event& event)
+{
+	if (event.key.code == sf::Keyboard::Z ||
+		event.key.code == sf::Keyboard::Q ||
+		event.key.code == sf::Keyboard::S ||
+		event.key.code == sf::Keyboard::D ||
+		event.key.code == sf::Keyboard::Space) {
+		this->inputs[event.key.code] = false;
+	}
+}
+
+void InputManager::UpdatePlayer() {
+	pPlayer->UpdateInputs(this->inputs);
 }
