@@ -17,6 +17,7 @@
 mono_crash.*
 
 # Build results
+Geometry Project/Geometry Project.cpp
 external/
 [Dd]ebug/
 [Dd]ebugPublic/
