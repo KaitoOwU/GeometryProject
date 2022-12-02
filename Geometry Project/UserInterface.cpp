@@ -1,16 +1,17 @@
 #include "UserInterface.h"
 
+
 UserInterface::UserInterface()
 {
 	_isMainMenuDisplayed = true;
 	_isGUIDisplayed = false;
+	gameFont.loadFromFile(GetAssetsPath("arial.ttf"));
 	
 	//Init shapes containers
 
 	InitRectShapesMainMenu();
 	InitTextMainMenu();
 	InitRectShapesGUI();
-
 }
 
 UserInterface::~UserInterface()
@@ -58,6 +59,7 @@ void UserInterface::InitTextMainMenu()
 {
 	textMainMenu.clear();
 	sf::Text text;
+	text.setFont(gameFont);
 	text.setString("Project");
 	text.setFillColor(sf::Color::Red);
 	text.setOrigin(WINDOW_SIZE.x, WINDOW_SIZE.y);

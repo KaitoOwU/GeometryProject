@@ -2,6 +2,7 @@
 #include "SFML/Graphics.hpp"
 #include "AllData.h"
 #include <vector>
+#include <iostream>
 
 class UserInterface
 {
@@ -9,6 +10,7 @@ public:
 	UserInterface();
 	~UserInterface();
 	void DisplayUI(sf::RenderWindow& window);
+	sf::Font gameFont;
 
 private:
 	bool _isMainMenuDisplayed;
