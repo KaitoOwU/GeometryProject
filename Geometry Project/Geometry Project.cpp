@@ -5,7 +5,7 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Project Geometry");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "ChronoSpacer");
     // Initialise everything below
     sf::Clock clock;
     float deltaTime = 0;
@@ -13,7 +13,6 @@ int main()
     InputManager* pInputManager = new InputManager(pPlayer);
     // Game loop
     while (window.isOpen()) {
-        deltaTime = clock.restart().asSeconds();
         sf::Event event;
         while (window.pollEvent(event)) {
             // Process any input event here
@@ -23,10 +22,7 @@ int main()
                     window.close();
                     break;
                 case sf::Event::KeyPressed:
-                    pInputManager->PressKey(event);
-                    break;
-                case sf::Event::KeyReleased:
-                    pInputManager->ReleaseKey(event);
+                    //...
                     break;
                 default:
                     break;
@@ -37,7 +33,7 @@ int main()
             }
         }
         window.clear();
-        window.draw(pPlayer->shape);
+        // Whatever I want to draw goes here
         window.display();
     }
 }
