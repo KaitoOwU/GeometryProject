@@ -1,16 +1,19 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Game.h"
-#include "Enemy.h"
 
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "ChronoSpacer");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Project Geometry");
     // Initialise everything below
-    Enemy* enemy = new Enemy(50.0f, { 100, 100 }, sf::Color::Yellow, 100.0f, 1.0f, 1.0f, 10.0f);
+    sf::Clock clock;
+    float deltaTime = 0;
+    Player* pPlayer = new Player(25, 5000, { 400, 300}, sf::Color::Red, &deltaTime);
+    InputManager* pInputManager = new InputManager(pPlayer);
     // Game loop
     while (window.isOpen()) {
+        deltaTime = clock.restart().asSeconds();
         sf::Event event;
         while (window.pollEvent(event)) {
             // Process any input event here
@@ -20,7 +23,10 @@ int main()
                     window.close();
                     break;
                 case sf::Event::KeyPressed:
-                    //...
+                    pInputManager->PressKey(event);
+                    break;
+                case sf::Event::KeyReleased:
+                    pInputManager->ReleaseKey(event);
                     break;
                 default:
                     break;
@@ -31,8 +37,7 @@ int main()
             }
         }
         window.clear();
-        // Whatever I want to draw goes here
-        window.draw(enemy->shape);
+        window.draw(pPlayer->shape);
         window.display();
     }
 }
