@@ -1,11 +1,6 @@
 #pragma once
 
-class Enemy
-{
-public:
+class Enemy {
 	Enemy();
 	~Enemy();
-
-private:
-
 };

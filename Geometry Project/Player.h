@@ -11,19 +11,18 @@ public:
 	sf::Window* activeWindow = nullptr;
 
 	enum MovementDirection {
-		None,
-		Up,
-		Down,
-		Left,
-		Right
+		None = -1,
+		Up = sf::Keyboard::Z,
+		Down = sf::Keyboard::S,
+		Left = sf::Keyboard::Q,
+		Right = sf::Keyboard::D
 	};
 
 	Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, float* deltaTime);
 	~Player();
 
 	void SetActiveWindow(sf::Window& window);
-	void Move(Player::MovementDirection* direction, int amount_of_value);
-	void UpdateInputs(std::map<sf::Keyboard::Key, bool>& inputs);
+	void Move(std::map<MovementDirection, bool>& inputs);
 
 private:
 	float* deltaTime;
