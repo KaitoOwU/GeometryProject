@@ -1,14 +1,15 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Game.h"
-
+#include "AllData.h"
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "ChronoSpacer");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y), "ChronoSpacer");
     // Initialise everything below
-
+    Game* game = new Game();
     // Game loop
+    std::cout << GetAppPath() << std::endl;
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -19,7 +20,7 @@ int main()
                     window.close();
                     break;
                 case sf::Event::KeyPressed:
-                    //...
+                    Input(event);
                     break;
                 default:
                     break;
@@ -31,6 +32,7 @@ int main()
         }
         window.clear();
         // Whatever I want to draw goes here
+        game->Display(window);
         window.display();
     }
 }
