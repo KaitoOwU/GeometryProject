@@ -1,5 +1,13 @@
 #pragma once
 
-#include "SFML/Graphics.hpp"
+#include "Player.h"
+#include <SFML/Graphics.hpp>
 
-void Input(sf::Event& event);
+class InputManager {
+public:
+	InputManager(Player* pPlayer);
+	void Input(sf::Event& event);
+
+private:
+	Player* pPlayer;
+};

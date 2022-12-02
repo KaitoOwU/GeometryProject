@@ -5,9 +5,10 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "ChronoSpacer");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Project Geometry");
     // Initialise everything below
-
+    Player* pPlayer = new Player(25, 10, { 400, 300}, sf::Color::Red);
+    InputManager* pInputManager = new InputManager(pPlayer);
     // Game loop
     while (window.isOpen()) {
         sf::Event event;
@@ -19,7 +20,7 @@ int main()
                     window.close();
                     break;
                 case sf::Event::KeyPressed:
-                    //...
+                    pInputManager->Input(event);
                     break;
                 default:
                     break;
@@ -30,7 +31,7 @@ int main()
             }
         }
         window.clear();
-        // Whatever I want to draw goes here
+        window.draw(pPlayer->shape);
         window.display();
     }
 }

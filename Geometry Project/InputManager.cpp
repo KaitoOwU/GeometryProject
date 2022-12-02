@@ -1,20 +1,25 @@
 #include "InputManager.h"
 
-void Input(sf::Event& event)
+InputManager::InputManager(Player* pPlayer)
+{
+	this->pPlayer = pPlayer;
+}
+
+void InputManager::Input(sf::Event& event)
 {
 	switch (event.key.code)
 	{
 	case sf::Keyboard::Z:
-		//MOVE TOP
+		pPlayer->Move(Player::MovementDirection::Up);
 		return;
 	case sf::Keyboard::Q:
-		//MOVE LEFT
+		pPlayer->Move(Player::MovementDirection::Left);
 		return;
 	case sf::Keyboard::S:
-		//MOVE BACK
+		pPlayer->Move(Player::MovementDirection::Down);
 		return;
 	case sf::Keyboard::D:
-		//MOVE RIGHT
+		pPlayer->Move(Player::MovementDirection::Right);
 		return;
 	case sf::Keyboard::Space:
 		//SHOOT
