@@ -44,6 +44,4 @@ void Player::Move(std::map<Player::MovementDirection, bool>& inputs)
 		}
 		it++;
 	}
-
-	
 }
