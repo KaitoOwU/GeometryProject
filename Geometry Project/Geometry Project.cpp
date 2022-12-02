@@ -13,6 +13,7 @@ int main()
     InputManager* pInputManager = new InputManager(pPlayer);
     // Game loop
     while (window.isOpen()) {
+        deltaTime = clock.restart().asSeconds();
         sf::Event event;
         while (window.pollEvent(event)) {
             // Process any input event here
@@ -22,9 +23,10 @@ int main()
                     window.close();
                     break;
                 case sf::Event::KeyPressed:
-                    //...
+                    pInputManager->PressKey(event);
                     break;
                 default:
+                    pInputManager->ReleaseKey(event);
                     break;
             }
 
@@ -33,7 +35,7 @@ int main()
             }
         }
         window.clear();
-        // Whatever I want to draw goes here
+        window.draw(pPlayer->shape);
         window.display();
     }
 }

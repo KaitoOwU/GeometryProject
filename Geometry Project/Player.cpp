@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <iostream>
+#include <cmath>
 
 Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, float* deltaTime)
 {
@@ -24,6 +25,24 @@ void Player::SetActiveWindow(sf::Window& window) {
 
 void Player::Move(std::map<Player::MovementDirection, bool>& inputs)
 {
+	std::cout << "Yes\n";
+
+	sf::Vector2f temp = this->shape.getPosition();
+	int x = temp.x + 20;
+	int nx = temp.x - 20;
+	int y = temp.y + 20;
+	int ny = temp.y - 20;
+
+	if (x > 800 || nx < 0) {
+		this->shape.setPosition(clamp)
+		return;
+	}
+	if (y > 600 || ny < 0) {
+		return;
+	}
+
+	std::cout << "Yes 2\n";
+
 	auto it = inputs.begin();
 	while (it != inputs.end()) {
 		if (it->second) {
