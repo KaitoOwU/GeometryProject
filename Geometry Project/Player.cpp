@@ -25,42 +25,37 @@ void Player::SetActiveWindow(sf::Window& window) {
 
 void Player::Move(std::map<Player::MovementDirection, bool>& inputs)
 {
-	std::cout << "Yes\n";
+	int x1 = 20;
+	int x2 = WINDOW_SIZE.x - 20;
+	int y1 = 20;
+	int y2 = WINDOW_SIZE.y - 20;
 
-	sf::Vector2f temp = this->shape.getPosition();
-	int x = temp.x + 20;
-	int nx = temp.x - 20;
-	int y = temp.y + 20;
-	int ny = temp.y - 20;
-
-	if (x > 800 || nx < 0) {
-		this->shape.setPosition(clamp)
-		return;
-	}
-	if (y > 600 || ny < 0) {
-		return;
-	}
-
-	std::cout << "Yes 2\n";
+	float px = shape.getPosition().x;
+	float py = shape.getPosition().y;
 
 	auto it = inputs.begin();
 	while (it != inputs.end()) {
 		if (it->second) {
 			switch (it->first) {
 			case Player::Up:
-				this->shape.move(0, -(this->movementSpeed * *(this->deltaTime)));
+				py -= (this->movementSpeed * *(this->deltaTime));
 				break;
 			case Player::Down:
-				this->shape.move(0, (this->movementSpeed * *(this->deltaTime)));
+				py += (this->movementSpeed * *(this->deltaTime));
 				break;
 			case Player::Right:
-				this->shape.move((this->movementSpeed * *(this->deltaTime)), 0);
+				px += (this->movementSpeed * *(this->deltaTime));
 				break;
 			case Player::Left:
-				this->shape.move(-(this->movementSpeed * *(this->deltaTime)), 0);
+				px -= (this->movementSpeed * *(this->deltaTime));
 				break;
 			}
 		}
 		it++;
 	}
+
+	this->shape.setPosition(
+		Clamp(px, x1, x2),
+		Clamp(py, y1, y2)
+	);
 }

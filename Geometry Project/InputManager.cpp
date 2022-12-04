@@ -13,6 +13,7 @@ void InputManager::PressKey(sf::Event& event)
 		event.key.code == sf::Keyboard::D ||
 		event.key.code == sf::Keyboard::Space) {
 		this->inputs[(Player::MovementDirection) event.key.code] = true;
+
 	}
 	pPlayer->Move(this->inputs);
 }

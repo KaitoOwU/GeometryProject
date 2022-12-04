@@ -1,4 +1,5 @@
 #pragma once
+#include "AllData.h"
 #include <SFML/Graphics.hpp>
 #include <map>
 #include <list>
@@ -26,4 +27,5 @@ public:
 
 private:
 	float* deltaTime;
+	float shootCooldown = 1.0f;
 };

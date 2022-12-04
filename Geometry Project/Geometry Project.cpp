@@ -1,11 +1,12 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Game.h"
+#include "AllData.h"
 
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "ChronoSpacer");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y), "Xenophobia");
     // Initialise everything below
     sf::Clock clock;
     float deltaTime = 0;
@@ -25,8 +26,10 @@ int main()
                 case sf::Event::KeyPressed:
                     pInputManager->PressKey(event);
                     break;
-                default:
+                case sf::Event::KeyReleased:
                     pInputManager->ReleaseKey(event);
+                    break;
+                default:
                     break;
             }
 

@@ -37,4 +37,6 @@ float GetDistance(sf::Vector2f a, sf::Vector2f b);
 
 float GetDistanceToLine(sf::Vector2f position, sf::Vector2f a, sf::Vector2f b);
 
+float Clamp(float value, float min, float max);
+
 sf::Vector2f GetProjectionOnLine(sf::Vector2f position, sf::Vector2f a, sf::Vector2f b);
