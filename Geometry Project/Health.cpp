@@ -14,6 +14,7 @@ Health::~Health()
 
 void Health::TakeDamage(float value)
 {
+
 	if (value > 0)
 	{
 		this->currentLife -= value;

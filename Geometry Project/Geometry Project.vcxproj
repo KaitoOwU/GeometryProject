@@ -134,10 +134,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AllData.cpp" />
+    <ClCompile Include="CharacterStats.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Geometry Project.cpp" />
+    <ClCompile Include="Health.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
@@ -146,9 +148,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AllData.h" />
+    <ClInclude Include="CharacterStats.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Health.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleSystem.h" />
