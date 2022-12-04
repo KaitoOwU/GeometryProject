@@ -7,13 +7,12 @@ void ButtonExit(sf::RenderWindow& window, Game* game)
 
 void ButtonPlay(sf::RenderWindow& window, Game* game)
 {
-	//Encore à faire 
+	game->LaunchGame();
 }
 
 UserInterface::UserInterface()
 {
 	*_isMainMenuDisplayed = true;
-	*_isGUIDisplayed = false;
 	gameFont->loadFromFile(GetAssetsPath("arial.ttf"));
 	
 	//Init shapes containers
@@ -44,7 +43,7 @@ void UserInterface::DisplayUI(sf::RenderWindow& window)
 			itText++;
 		}
 	}
-	if (*_isGUIDisplayed)
+	else
 	{
 		std::list<sf::RectangleShape>::iterator it = rectShapesGUI.begin();
 		while (it != rectShapesGUI.end())
@@ -77,11 +76,9 @@ void UserInterface::InitRectShapesMainMenu()
 	SetBothColor(rect, sf::Color::Black, sf::Color::White);
 	rect.setOrigin({ rect.getSize().x / 2.f ,rect.getSize().y / 2.f });
 	rect.setPosition({ WINDOW_SIZE.x / 2.f,WINDOW_SIZE.y * (2.f / 4.f) });
-	Button button = Button(rect, &ButtonExit);
-	rectShapesMainMenu.push_back(button);
+	rectShapesMainMenu.push_back(Button(rect, &ButtonPlay));
 	rect.setPosition({ WINDOW_SIZE.x / 2.f,WINDOW_SIZE.y * (3.f / 4.f) });
-	button.shape = rect;
-	rectShapesMainMenu.push_back(button);
+	rectShapesMainMenu.push_back(Button(rect, &ButtonExit));
 }
 
 void UserInterface::InitTextMainMenu()

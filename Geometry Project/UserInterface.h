@@ -29,17 +29,18 @@ public:
 	void DisplayUI(sf::RenderWindow& window);
 	sf::Font* gameFont = new sf::Font;
 	void CheckClick(sf::Vector2i mousePosition, sf::RenderWindow& window, Game* game);
+	bool* _isMainMenuDisplayed = new bool;
 
 private:
-	bool* _isMainMenuDisplayed = new bool;
 	sf::Vector2f* rectMainMenuSize = new sf::Vector2f{500.f, 100.f};
 	std::list<Button> rectShapesMainMenu;
 	void InitRectShapesMainMenu();
 	std::list<sf::Text> textMainMenu;
 	void InitTextMainMenu();
-	bool* _isGUIDisplayed = new bool;
 	std::list<sf::RectangleShape> rectShapesGUI;
 	void InitRectShapesGUI();
 };
 
 void SetBothColor(sf::RectangleShape& rect, sf::Color fillColor, sf::Color outLinecolor);
+
+#include "Game.h"

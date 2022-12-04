@@ -16,11 +16,12 @@ enum GAMESTATE
 class Game
 {
 public:
+	UserInterface* ui = nullptr;
 	Game();
 	~Game();
 	void Display(sf::RenderWindow& window);
 	void Update(float& deltaTime);
-	UserInterface* ui = nullptr;
+	void LaunchGame();
 
 private:
 	GAMESTATE* gameState = new GAMESTATE;

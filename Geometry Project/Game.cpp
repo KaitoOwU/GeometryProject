@@ -32,3 +32,10 @@ void Game::Update(float& deltaTime)
 		return;
 	}
 }
+
+void Game::LaunchGame()
+{
+	*ui->_isMainMenuDisplayed = false;
+	*gameState = GAMESTATE::PLAYING;
+	std::cout << "CA MARCHE" << std::endl;
+}
