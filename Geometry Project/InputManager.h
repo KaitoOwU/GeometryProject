@@ -11,8 +11,7 @@ public:
 	
 	void PressKey(sf::Event& event);
 	void ReleaseKey(sf::Event& event);
-	void UpdatePlayer();
-	std::map<sf::Keyboard::Key, bool> inputs;
+	std::map<Player::MovementDirection, bool> inputs;
 
 private:
 	Player* pPlayer;

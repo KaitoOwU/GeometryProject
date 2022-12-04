@@ -12,8 +12,9 @@ void InputManager::PressKey(sf::Event& event)
 		event.key.code == sf::Keyboard::S ||
 		event.key.code == sf::Keyboard::D ||
 		event.key.code == sf::Keyboard::Space) {
-		this->inputs[event.key.code] = true;
+		this->inputs[(Player::MovementDirection) event.key.code] = true;
 	}
+	pPlayer->Move(this->inputs);
 }
 
 void InputManager::ReleaseKey(sf::Event& event)
@@ -23,10 +24,7 @@ void InputManager::ReleaseKey(sf::Event& event)
 		event.key.code == sf::Keyboard::S ||
 		event.key.code == sf::Keyboard::D ||
 		event.key.code == sf::Keyboard::Space) {
-		this->inputs[event.key.code] = false;
+		this->inputs[(Player::MovementDirection) event.key.code] = false;
 	}
-}
-
-void InputManager::UpdatePlayer() {
-	pPlayer->UpdateInputs(this->inputs);
+	pPlayer->Move(this->inputs);
 }
