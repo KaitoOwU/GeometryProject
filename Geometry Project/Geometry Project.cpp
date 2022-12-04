@@ -8,7 +8,8 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y), "ChronoSpacer");
     // Initialise everything below
-    Game game = Game();
+    Game* game = new Game();
+    sf::Mouse mouse = sf::Mouse();
     sf::Clock clock;
     float deltaTime = 0.f;
     // Game loop
@@ -21,7 +22,10 @@ int main()
                     window.close();
                     break;
                 case sf::Event::KeyPressed:
-                    //...
+                    break;
+                case sf::Event::MouseButtonPressed:
+                    game->ui->CheckClick(mouse.getPosition(window),
+                        window, game);
                     break;
                 default:
                     break;
@@ -32,11 +36,11 @@ int main()
         }
         deltaTime = clock.restart().asSeconds();
 
-        game.Update(deltaTime);
+        game->Update(deltaTime);
 
         window.clear();
-
-        game.Display(window);
+        
+        game->Display(window);
 
         window.display();
     }

@@ -17,6 +17,7 @@ std::string GetAssetsPath()
 
 std::string GetAssetsPath(std::string fileName)
 {
+	std::cout << GetAssetsPath() + "\\" + fileName << std::endl;
 	return GetAssetsPath() + "\\" + fileName;
 }
 

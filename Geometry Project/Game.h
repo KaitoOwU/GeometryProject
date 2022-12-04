@@ -20,9 +20,9 @@ public:
 	~Game();
 	void Display(sf::RenderWindow& window);
 	void Update(float& deltaTime);
-	UserInterface ui;
+	UserInterface* ui = nullptr;
 
 private:
-	GAMESTATE gameState;
+	GAMESTATE* gameState = new GAMESTATE;
 };
 
