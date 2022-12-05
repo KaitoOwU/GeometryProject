@@ -4,7 +4,7 @@
 
 class Projectile {
 public:
-	Projectile(sf::CircleShape& shape, sf::Vector2f& direction);
+	Projectile(sf::Vector2f& direction, float* deltaTime);
 	~Projectile();
 	void StartMoving();
 
@@ -12,4 +12,6 @@ public:
 
 private:
 	sf::Vector2f direction;
+	float lifeDuration = 5.0f;
+	float* deltaTime;
 };

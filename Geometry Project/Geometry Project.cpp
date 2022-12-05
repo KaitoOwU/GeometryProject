@@ -10,12 +10,15 @@ int main()
     // Initialise everything below
     sf::Clock clock;
     float deltaTime = 0;
-    Player* pPlayer = new Player(25, 5000, {400, 300}, sf::Color::Red, &deltaTime);
+    Player* pPlayer = new Player(25, 5000, {400, 300}, sf::Color::Red, &deltaTime, &window);
     InputManager* pInputManager = new InputManager(pPlayer);
     // Game loop
     while (window.isOpen()) {
         deltaTime = clock.restart().asSeconds();
         sf::Event event;
+
+        pPlayer->shootCooldown -= deltaTime;
+
         while (window.pollEvent(event)) {
             // Process any input event here
 
