@@ -34,13 +34,7 @@ void Game::Display(sf::RenderWindow& window)
 	{
 		pEnemyManager->DrawEnemy();
 		pPlayer->Display(window);
-
-		auto it = pPlayer->projectileList.begin();
-		while (it != pPlayer->projectileList.end()) {
-			window.draw((*it)->shape);
-			it++;
-		}
-		return;
+		pPlayer->DisplayProjectile(window);
 
 		break;
 	}
@@ -74,18 +68,8 @@ void Game::Update(float& deltaTime)
 		pPlayer->Move(pInputManager->inputs, deltaTime);
 		pPlayer->shootCooldown -= deltaTime;
 		pPlayer->Shoot(pInputManager->inputs, deltaTime);
-
-		auto it = pPlayer->projectileList.begin();
-		while (it != pPlayer->projectileList.end()) {
-			(*it)->shape.move(((*it)->direction) / 4.f);
-			(*it)->lifeDuration -= deltaTime;
-			if ((*it)->lifeDuration <= 0) {
-				it = pPlayer->projectileList.erase(it);
-				continue;
-			}
-			it++;
-		}
-		return;
+		pPlayer->UpdateProjectile(deltaTime);
+		
 	}
 	case MENUOPEN:
 		return;

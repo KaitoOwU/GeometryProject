@@ -28,4 +28,7 @@ public:
 	void Move(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime);
 	void Shoot(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime);
 	void Display(sf::RenderWindow& window);
+
+	void UpdateProjectile(float& deltaTime);
+	void DisplayProjectile(sf::RenderWindow& window);
 };

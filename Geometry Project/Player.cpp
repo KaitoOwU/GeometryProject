@@ -65,6 +65,29 @@ void Player::Shoot(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime) 
 	}
 }
 
+void Player::UpdateProjectile(float& deltaTime) {
+	auto it = projectileList.begin();
+	while (it != projectileList.end()) {
+		(*it)->shape.move(((*it)->direction) / 4.f);
+		(*it)->lifeDuration -= deltaTime;
+		if ((*it)->lifeDuration <= 0) {
+			it = projectileList.erase(it);
+			continue;
+		}
+		it++;
+	}
+	return;
+}
+
+void Player::DisplayProjectile(sf::RenderWindow& window)
+{
+	auto it = projectileList.begin();
+	while (it != projectileList.end()) {
+		window.draw((*it)->shape);
+		it++;
+	}
+}
+
 void Player::Display(sf::RenderWindow& window)
 {
 	window.draw(shape);
