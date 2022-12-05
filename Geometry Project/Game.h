@@ -15,6 +15,13 @@ enum GAMESTATE
 	UPGRADING,
 };
 
+enum UPGRADES {
+	SPEED,
+	DAMAGE,
+	HEALTH,
+	MUTATION,
+};
+
 class Game
 {
 public:
@@ -26,6 +33,8 @@ public:
 	void LaunchGame();
 	void CloseGame();
 	void PauseGame();
+	void ResetGame();
+	void UpgradePlayer(UPGRADES upgrade);
 	GAMESTATE* gameState;
 	Player* pPlayer;
 	EnemyManager* pEnemyManager;

@@ -120,3 +120,26 @@ void Game::PauseGame()
 		return;
 	}
 }
+
+void Game::ResetGame()
+{
+	//A FAIRE
+	*gameState = MENUOPEN;
+}
+
+void Game::UpgradePlayer(UPGRADES upgrade)
+{
+	switch (upgrade)
+	{
+	case SPEED:
+		break;
+	case DAMAGE:
+		break;
+	case HEALTH:
+		break;
+	case MUTATION:
+		break;
+	default:
+		break;
+	}
+}

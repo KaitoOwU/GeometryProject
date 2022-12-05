@@ -6,20 +6,21 @@
 #include <cmath>
 
 class Game;
-typedef void(*ButtonFunction)(Game*);
+
+typedef void(*ButtonMenuBehaviour)(Game* game);
 
 struct Button {
 	sf::RectangleShape shape;
-	ButtonFunction pButtonFunction;
-	Button(sf::RectangleShape rect, ButtonFunction buttonFunction) {
+	ButtonMenuBehaviour pButtonFunction;
+	Button(sf::RectangleShape rect, ButtonMenuBehaviour buttonFunction) {
 		shape = rect;
 		pButtonFunction = buttonFunction;
 	}
 };
 
-void ButtonExit(Game* game);
-
 void ButtonPlay(Game* game);
+void ButtonReset(Game* game);
+void ButtonExit(Game* game);
 
 class UserInterface
 {
@@ -30,18 +31,26 @@ public:
 	void DisplayGUI(sf::RenderWindow& window);
 	void DisplayUpgradeMenu(sf::RenderWindow& window);
 	void DisplayPauseMenu(sf::RenderWindow& window);
-	sf::Font* gameFont;
 	void CheckClick(sf::Vector2i mousePosition, sf::RenderWindow& window, Game* game);
+	void UpdateGUI(float& currentHealth, float& maxHealth, float& currentXP, float& xpNextLevel);
+	sf::Font* gameFont;
 	Game* game;
 
 private:
 	void InitRectShapesMainMenu();
 	void InitTextMainMenu();
 	void InitRectShapesGUI();
+	void InitRectShapesPauseMenu();
+	void InitTextPauseMenu();
 	sf::Vector2f* rectMainMenuSize;
 	std::list<Button> rectShapesMainMenu;
 	std::list<sf::Text> textMainMenu;
 	std::list<sf::RectangleShape> rectShapesGUI;
+	std::list<Button> rectShapesPauseMenu;
+	std::list<sf::Text> textPauseMenu;
+	std::list<Button> rectShapesUpgradeMenu;
+	std::list<sf::Text> textUpgradeMenu;
+
 };
 
 void SetBothColor(sf::RectangleShape& rect, sf::Color fillColor, sf::Color outLinecolor);
