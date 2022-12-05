@@ -6,7 +6,7 @@ Game::Game(sf::RenderWindow* window)
 	(*gameState) = GAMESTATE::MENUOPEN;
 	ui = new UserInterface(this);
 	renderWindow = window;
-	pPlayer = new Player(25, 5000, { 400, 300 }, sf::Color::Red, window);
+	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, window);
 	pEnemyManager = new EnemyManager(window);
 	pInputManager = new InputManager(pPlayer);
 }
@@ -34,6 +34,8 @@ void Game::Display(sf::RenderWindow& window)
 	{
 		pEnemyManager->DrawEnemy();
 		pPlayer->Display(window);
+		pPlayer->DisplayProjectile(window);
+
 		break;
 	}
 	case GAMESTATE::UPGRADING:
@@ -60,10 +62,15 @@ void Game::Update(float& deltaTime)
 	//Ajouter ICI toutes les fonctions de rafraichissement du jeu
 	switch (*gameState)
 	{
-	case PLAYING:
+	case PLAYING: {
 		pEnemyManager->TrackPlayer(pPlayer, deltaTime);
+
+		pPlayer->Move(pInputManager->inputs, deltaTime);
 		pPlayer->shootCooldown -= deltaTime;
-		return;
+		pPlayer->Shoot(pInputManager->inputs, deltaTime);
+		pPlayer->UpdateProjectile(deltaTime);
+		
+	}
 	case MENUOPEN:
 		return;
 	case PAUSE:
