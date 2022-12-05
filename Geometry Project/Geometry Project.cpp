@@ -16,7 +16,6 @@ int main()
     InputManager* pInputManager = new InputManager(pPlayer);
     // Game loop
     while (window.isOpen()) {
-        deltaTime = clock.restart().asSeconds();
         sf::Event event;
 
         pPlayer->shootCooldown -= deltaTime;
@@ -51,6 +50,7 @@ int main()
         window.clear();
         
         game->Display(window);
+        pPlayer->Display(window);
 
         window.display();
     }

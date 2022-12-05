@@ -68,3 +68,8 @@ void Player::Shoot() {
 		this->projectileList.push_back(proj);
 	}
 }
+
+void Player::Display(sf::RenderWindow& window)
+{
+	window.draw(shape);
+}

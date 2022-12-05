@@ -27,6 +27,8 @@ public:
 
 	void Move(std::map<sf::Keyboard::Key, bool>& inputs);
 	void Shoot();
+	void Display(sf::RenderWindow& window);
+	void Update(float deltaTime);
 
 private:
 	float* deltaTime;
