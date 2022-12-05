@@ -1,4 +1,6 @@
 #pragma once
+#include "AllData.h"
+#include "Projectile.h"
 #include <SFML/Graphics.hpp>
 #include <map>
 #include <list>
@@ -8,7 +10,9 @@ class Player
 public:
 	sf::CircleShape shape;
 	float movementSpeed;
-	sf::Window* activeWindow = nullptr;
+	sf::RenderWindow* activeWindow = nullptr;
+	float shootCooldown = 1.0f;
+	std::list<Projectile*> projectileList;
 
 	enum MovementDirection {
 		None = -1,
@@ -18,11 +22,13 @@ public:
 		Right = sf::Keyboard::D
 	};
 
-	Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, float* deltaTime);
+	Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, float* deltaTime, sf::RenderWindow* window);
 	~Player();
 
-	void SetActiveWindow(sf::Window& window);
-	void Move(std::map<MovementDirection, bool>& inputs);
+	void Move(std::map<sf::Keyboard::Key, bool>& inputs);
+	void Shoot();
+	void Display(sf::RenderWindow& window);
+	void Update(float deltaTime);
 
 private:
 	float* deltaTime;

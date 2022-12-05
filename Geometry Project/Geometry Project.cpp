@@ -6,21 +6,25 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y), "ChronoSpacer");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y), "Xenophobia");
     // Initialise everything below
     Game* game = new Game();
     sf::Mouse mouse = sf::Mouse();
     sf::Clock clock;
     float deltaTime = 0.f;
-    Player* pPlayer = new Player(25, 5000, { 400, 300 }, sf::Color::Red, &deltaTime);
+    Player* pPlayer = new Player(25, 5000, {400, 300}, sf::Color::Red, &deltaTime, &window);
     EnemyManager* pEnemyManager = new EnemyManager(window);
     InputManager* pInputManager = new InputManager(pPlayer);
 
+    
     
     // Game loop
     while (window.isOpen()) {
         deltaTime = clock.restart().asSeconds();
         sf::Event event;
+
+        pPlayer->shootCooldown -= deltaTime;
+
         while (window.pollEvent(event)) {
             // Process any input event here
             switch (event.type) {
@@ -28,6 +32,10 @@ int main()
                     window.close();
                     break;
                 case sf::Event::KeyPressed:
+                    pInputManager->PressKey(event);
+                    break;
+                case sf::Event::KeyReleased:
+                    pInputManager->ReleaseKey(event);
                     break;
                 case sf::Event::MouseButtonPressed:
                     pEnemyManager->SpawnEnemy(1);   
@@ -53,6 +61,7 @@ int main()
         window.clear();
         
         game->Display(window);
+        pPlayer->Display(window);
 
         window.draw(pPlayer->shape);
         pEnemyManager->DrawEnemy();

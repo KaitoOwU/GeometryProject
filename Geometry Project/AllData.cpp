@@ -98,6 +98,19 @@ float GetDistanceToLine(sf::Vector2f position, sf::Vector2f a, sf::Vector2f b)
 	return GetMagnitude(proj - position);
 }
 
+float Clamp(float value, float min, float max)
+{
+	if (value < min) {
+		return min;
+	}
+	else if (value > max) {
+		return max;
+	}
+	else {
+		return value;
+	}
+}
+
 
 sf::Vector2f GetProjectionOnLine(sf::Vector2f position, sf::Vector2f a, sf::Vector2f b)
 {

@@ -26,6 +26,8 @@ sf::Vector2f Normalize(sf::Vector2f v);
 float Dot(sf::Vector2f a, sf::Vector2f b);
 float GetDistance(sf::Vector2f a, sf::Vector2f b);
 float GetDistanceToLine(sf::Vector2f position, sf::Vector2f a, sf::Vector2f b);
+float Clamp(float value, float min, float max);
+
 sf::Vector2f GetProjectionOnLine(sf::Vector2f position, sf::Vector2f a, sf::Vector2f b);
 
 float Lerp(float a, float b, float t);
