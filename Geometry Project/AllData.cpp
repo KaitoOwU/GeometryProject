@@ -1,4 +1,5 @@
 #include "AllData.h"
+#include <iostream>
 
 std::string GetAppPath() {
 	char cExeFilePath[256];
@@ -11,12 +12,13 @@ std::string GetAppPath() {
 
 std::string GetAssetsPath()
 {
-	return GetAppPath() + "\\Assets";
+	return GetAppPath() + "\Assets";
 }
 
 std::string GetAssetsPath(std::string fileName)
 {
-	return GetAssetsPath() + fileName;
+	std::cout << GetAssetsPath() + "\\" + fileName << std::endl;
+	return GetAssetsPath() + "\\" + fileName;
 }
 
 bool IsOverlappingCircleOnCircle(sf::Vector2f aPosition, float aRadius, sf::Vector2f bPosition, float bRadius)
