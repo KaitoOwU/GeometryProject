@@ -2,16 +2,16 @@
 #include <iostream>
 #include <cmath>
 
-Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, float* deltaTime, sf::RenderWindow* window)
+Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window)
 {
 	sf::CircleShape shape;
 	shape.setRadius(size);
+	this->shape.setOrigin(this->shape.getRadius() / 2, this->shape.getRadius() / 2);
 	shape.setPosition(initialPosition);
 	shape.setFillColor(color);
 
 	this->shape = shape;
 	this->movementSpeed = movementSpeed;
-	this->deltaTime = deltaTime;
 	this->activeWindow = window;
 }
 
@@ -19,13 +19,8 @@ Player::~Player()
 {
 }
 
-void Player::Move(std::map<sf::Keyboard::Key, bool>& inputs)
+void Player::Move(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime)
 {
-	int x1 = 20;
-	int x2 = WINDOW_SIZE.x - 20;
-	int y1 = 20;
-	int y2 = WINDOW_SIZE.y - 20;
-
 	float px = shape.getPosition().x;
 	float py = shape.getPosition().y;
 
@@ -34,16 +29,16 @@ void Player::Move(std::map<sf::Keyboard::Key, bool>& inputs)
 		if (it->second) {
 			switch ((Player::MovementDirection) it->first) {
 			case Player::Up:
-				py -= (this->movementSpeed * *(this->deltaTime));
+				py -= (this->movementSpeed *deltaTime);
 				break;
 			case Player::Down:
-				py += (this->movementSpeed * *(this->deltaTime));
+				py += (this->movementSpeed * deltaTime);
 				break;
 			case Player::Right:
-				px += (this->movementSpeed * *(this->deltaTime));
+				px += (this->movementSpeed * deltaTime);
 				break;
 			case Player::Left:
-				px -= (this->movementSpeed * *(this->deltaTime));
+				px -= (this->movementSpeed * deltaTime);
 				break;
 			}
 		}
@@ -51,8 +46,8 @@ void Player::Move(std::map<sf::Keyboard::Key, bool>& inputs)
 	}
 
 	this->shape.setPosition(
-		Clamp(px, x1, x2),
-		Clamp(py, y1, y2)
+		Clamp(px, 20, WINDOW_SIZE.x - 20),
+		Clamp(py, 20, WINDOW_SIZE.y - 20)
 	);
 }
 

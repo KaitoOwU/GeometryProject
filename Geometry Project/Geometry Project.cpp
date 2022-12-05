@@ -7,19 +7,14 @@
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y), "Xenophobia");
-    // Initialise everything below
-    Game* game = new Game();
+    Game* game = new Game(&window);
     sf::Mouse mouse = sf::Mouse();
     sf::Clock clock;
-    float deltaTime = 0;
-    Player* pPlayer = new Player(25, 5000, {400, 300}, sf::Color::Red, &deltaTime, &window);
-    InputManager* pInputManager = new InputManager(pPlayer);
+    float deltaTime = 0.f;
     // Game loop
     while (window.isOpen()) {
+        deltaTime = clock.restart().asSeconds();
         sf::Event event;
-
-        pPlayer->shootCooldown -= deltaTime;
-
         while (window.pollEvent(event)) {
             // Process any input event here
             switch (event.type) {
@@ -27,16 +22,19 @@ int main()
                     window.close();
                     break;
                 case sf::Event::KeyPressed:
-                    pInputManager->PressKey(event);
+                    game->pInputManager->PressKey(event, deltaTime);
                     break;
                 case sf::Event::KeyReleased:
-                    pInputManager->ReleaseKey(event);
+                    game->pInputManager->ReleaseKey(event, deltaTime);
                     break;
                 case sf::Event::MouseButtonPressed:
+                    game->pEnemyManager->SpawnEnemy(1);
+                    game->pInputManager->PressKey(event, deltaTime);
                     game->ui->CheckClick(mouse.getPosition(window),
                         window, game);
                     break;
                 default:
+                    game->pInputManager->ReleaseKey(event, deltaTime);
                     break;
             }
             if (event.type == sf::Event::Closed) {
@@ -50,8 +48,8 @@ int main()
         window.clear();
         
         game->Display(window);
-        pPlayer->Display(window);
 
         window.display();
     }
+    delete game;
 }

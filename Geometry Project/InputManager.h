@@ -9,8 +9,8 @@ class InputManager {
 public:
 	InputManager(Player* pPlayer);
 	
-	void PressKey(sf::Event& event);
-	void ReleaseKey(sf::Event& event);
+	void PressKey(sf::Event& event, float& deltaTime);
+	void ReleaseKey(sf::Event& event, float& deltaTime);
 	std::map<sf::Keyboard::Key, bool> inputs;
 
 private:

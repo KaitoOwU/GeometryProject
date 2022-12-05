@@ -1,22 +1,23 @@
 #include "UserInterface.h"
 
-void ButtonExit(sf::RenderWindow& window, Game* game)
+void ButtonExit(Game* game)
 {
-	window.close();
+	game->renderWindow->close();
 }
 
-void ButtonPlay(sf::RenderWindow& window, Game* game)
+void ButtonPlay(Game* game)
 {
 	game->LaunchGame();
 }
 
-UserInterface::UserInterface()
+UserInterface::UserInterface(Game* game)
 {
-	*_isMainMenuDisplayed = true;
+	gameFont = new sf::Font;
 	gameFont->loadFromFile(GetAssetsPath("arial.ttf"));
-	
+	this->game = game;
+	rectMainMenuSize = new sf::Vector2f;
+	*rectMainMenuSize = sf::Vector2f{ 500.f, 100.f };
 	//Init shapes containers
-
 	InitRectShapesMainMenu();
 	InitTextMainMenu();
 	InitRectShapesGUI();
@@ -24,11 +25,15 @@ UserInterface::UserInterface()
 
 UserInterface::~UserInterface()
 {
+	delete gameFont;
+	delete rectMainMenuSize;
 }
 
 void UserInterface::DisplayUI(sf::RenderWindow& window)
 {
-	if (*_isMainMenuDisplayed)
+	switch (*(game->gameState))
+	{
+	case GAMESTATE::MENUOPEN:
 	{
 		std::list<Button>::iterator itButton = rectShapesMainMenu.begin();
 		while (itButton != rectShapesMainMenu.end())
@@ -42,8 +47,9 @@ void UserInterface::DisplayUI(sf::RenderWindow& window)
 			window.draw(*itText);
 			itText++;
 		}
+		return;
 	}
-	else
+	case GAMESTATE::PLAYING:
 	{
 		std::list<sf::RectangleShape>::iterator it = rectShapesGUI.begin();
 		while (it != rectShapesGUI.end())
@@ -51,20 +57,57 @@ void UserInterface::DisplayUI(sf::RenderWindow& window)
 			window.draw(*it);
 			it++;
 		}
+		return;
+	}
+	case GAMESTATE::UPGRADING:
+	{
+
+		return;
+	}
+	case GAMESTATE::PAUSE:
+	{
+
+		return;
+	}
+	default:
+	{
+		return;
+	}
 	}
 }
 
 void UserInterface::CheckClick(sf::Vector2i mousePosition, sf::RenderWindow& window, Game* game)
 {
-	std::list<Button>::iterator itButton = rectShapesMainMenu.begin();
-	while (itButton != rectShapesMainMenu.end())
+	switch (*(game->gameState))
 	{
-		if (IsOverlappingCircleOnBox((sf::Vector2f)mousePosition, 0.1f,
-			itButton->shape.getPosition(), itButton->shape.getSize()))
+	case GAMESTATE::MENUOPEN:
+	{
+		std::list<Button>::iterator itButton = rectShapesMainMenu.begin();
+		while (itButton != rectShapesMainMenu.end())
 		{
-			(*itButton->pButtonFunction)(window, game);
+			if (IsOverlappingCircleOnBox((sf::Vector2f)mousePosition, 0.1f,
+				itButton->shape.getPosition(), itButton->shape.getSize()))
+			{
+				(*itButton->pButtonFunction)(game);
+			}
+			itButton++;
 		}
-		itButton++;
+		return;
+	}
+	case GAMESTATE::UPGRADING:
+	{
+
+		return;
+	}
+	case GAMESTATE::PAUSE:
+	{
+
+		return;
+	}
+	default:
+	{
+		return;
+	}
 	}
 }
 

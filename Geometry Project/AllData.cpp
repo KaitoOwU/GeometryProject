@@ -118,3 +118,13 @@ sf::Vector2f GetProjectionOnLine(sf::Vector2f position, sf::Vector2f a, sf::Vect
 	sf::Vector2f AB = b - a;
 	return a + Normalize(AB) * Dot(Normalize(AP), Normalize(AB));
 }
+
+float Lerp(float a, float b, float t)
+{
+	return a + (b - a) * t;
+}
+
+sf::Vector2f Lerp(sf::Vector2f a, sf::Vector2f b, float t)
+{
+	return a + (b - a) * t;
+}
