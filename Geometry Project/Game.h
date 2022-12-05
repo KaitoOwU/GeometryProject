@@ -4,6 +4,7 @@
 #include "InputManager.h"
 #include "ParticleSystem.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "UserInterface.h"
 
 enum GAMESTATE
