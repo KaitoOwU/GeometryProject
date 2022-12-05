@@ -21,6 +21,9 @@ Player::~Player()
 
 void Player::Move(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime)
 {
+	if (!this->canMove)
+		return;
+
 	float px = shape.getPosition().x;
 	float py = shape.getPosition().y;
 
