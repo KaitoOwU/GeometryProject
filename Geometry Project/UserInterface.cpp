@@ -1,41 +1,113 @@
 #include "UserInterface.h"
 
-UserInterface::UserInterface()
+void ButtonExit(sf::RenderWindow& window, Game* game)
 {
-	_isMainMenuDisplayed = true;
-	_isGUIDisplayed = false;
-	
-	//Init shapes containers
+	window.close();
+}
 
+void ButtonPlay(sf::RenderWindow& window, Game* game)
+{
+	game->LaunchGame();
+}
+
+UserInterface::UserInterface(Game* game)
+{
+	gameFont = new sf::Font;
+	gameFont->loadFromFile(GetAssetsPath("arial.ttf"));
+	this->game = game;
+	rectMainMenuSize = new sf::Vector2f;
+	*rectMainMenuSize = sf::Vector2f{ 500.f, 100.f };
+	//Init shapes containers
 	InitRectShapesMainMenu();
 	InitTextMainMenu();
 	InitRectShapesGUI();
-
 }
 
 UserInterface::~UserInterface()
 {
+	delete gameFont;
+	delete rectMainMenuSize;
 }
 
 void UserInterface::DisplayUI(sf::RenderWindow& window)
 {
-	if (_isMainMenuDisplayed)
+	switch (*(game->gameState))
 	{
-		for (int i = 0; i < rectShapesMainMenu.size(); i++)
+	case GAMESTATE::MENUOPEN:
+	{
+		std::list<Button>::iterator itButton = rectShapesMainMenu.begin();
+		while (itButton != rectShapesMainMenu.end())
 		{
-			window.draw(rectShapesMainMenu[i]);
+			window.draw(itButton->shape);
+			itButton++;
 		}
-		for (int i = 0; i < textMainMenu.size(); i++)
+		std::list<sf::Text>::iterator itText = textMainMenu.begin();
+		while (itText != textMainMenu.end())
 		{
-			window.draw(textMainMenu[i]);
+			window.draw(*itText);
+			itText++;
 		}
+		return;
 	}
-	if (_isGUIDisplayed)
+	case GAMESTATE::PLAYING:
 	{
-		for (int i = 0; i < rectShapesGUI.size(); i++)
+		std::list<sf::RectangleShape>::iterator it = rectShapesGUI.begin();
+		while (it != rectShapesGUI.end())
 		{
-			window.draw(rectShapesGUI[i]);
+			window.draw(*it);
+			it++;
 		}
+		return;
+	}
+	case GAMESTATE::UPGRADING:
+	{
+
+		return;
+	}
+	case GAMESTATE::PAUSE:
+	{
+
+		return;
+	}
+	default:
+	{
+		return;
+	}
+	}
+}
+
+void UserInterface::CheckClick(sf::Vector2i mousePosition, sf::RenderWindow& window, Game* game)
+{
+	switch (*(game->gameState))
+	{
+	case GAMESTATE::MENUOPEN:
+	{
+		std::list<Button>::iterator itButton = rectShapesMainMenu.begin();
+		while (itButton != rectShapesMainMenu.end())
+		{
+			if (IsOverlappingCircleOnBox((sf::Vector2f)mousePosition, 0.1f,
+				itButton->shape.getPosition(), itButton->shape.getSize()))
+			{
+				(*itButton->pButtonFunction)(window, game);
+			}
+			itButton++;
+		}
+		return;
+	}
+	case GAMESTATE::UPGRADING:
+	{
+
+		return;
+	}
+	case GAMESTATE::PAUSE:
+	{
+
+		return;
+	}
+	default:
+	{
+		return;
+	}
 	}
 }
 
@@ -43,26 +115,28 @@ void UserInterface::InitRectShapesMainMenu()
 {
 	rectShapesMainMenu.clear();
 	sf::RectangleShape rect;
-	rect.setSize(rectMainMenuSize);
-	rect.setOrigin({ rect.getSize().x / 2.f ,rect.getSize().y / 2.f });
-	rect.setPosition({ WINDOW_SIZE.x / 2.f,WINDOW_SIZE.y * (1.f / 4.f) });
+	rect.setSize(*rectMainMenuSize);
 	SetBothColor(rect, sf::Color::Black, sf::Color::White);
-	rectShapesMainMenu.push_back(rect);
+	rect.setOrigin({ rect.getSize().x / 2.f ,rect.getSize().y / 2.f });
 	rect.setPosition({ WINDOW_SIZE.x / 2.f,WINDOW_SIZE.y * (2.f / 4.f) });
-	rectShapesMainMenu.push_back(rect);
+	rectShapesMainMenu.push_back(Button(rect, &ButtonPlay));
 	rect.setPosition({ WINDOW_SIZE.x / 2.f,WINDOW_SIZE.y * (3.f / 4.f) });
-	rectShapesMainMenu.push_back(rect);
+	rectShapesMainMenu.push_back(Button(rect, &ButtonExit));
 }
 
 void UserInterface::InitTextMainMenu()
 {
 	textMainMenu.clear();
 	sf::Text text;
-	text.setString("Project");
-	text.setFillColor(sf::Color::Red);
-	text.setOrigin(WINDOW_SIZE.x, WINDOW_SIZE.y);
+	text.setFont(*gameFont);
+	text.setStyle(sf::Text::Bold);
+	text.setFillColor(sf::Color::White);
 	text.setCharacterSize(24);
-	text.setPosition(WINDOW_SIZE.x, WINDOW_SIZE.y);
+	text.setPosition(WINDOW_SIZE / 2.f + sf::Vector2f{-45.f, -15.f});
+	text.setString("Play");
+	textMainMenu.push_back(text);
+	text.setPosition(sf::Vector2f{ WINDOW_SIZE.x / 2.f,WINDOW_SIZE.y * (3.f / 4.f) } + sf::Vector2f{ -45.f, -15.f });
+	text.setString("Quit");
 	textMainMenu.push_back(text);
 }
 

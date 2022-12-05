@@ -6,14 +6,25 @@
 #include "Player.h"
 #include "UserInterface.h"
 
+enum GAMESTATE
+{
+	MENUOPEN,
+	PLAYING,
+	PAUSE,
+	UPGRADING,
+};
+
 class Game
 {
 public:
+	UserInterface* ui = nullptr;
 	Game();
 	~Game();
 	void Display(sf::RenderWindow& window);
+	void Update(float& deltaTime);
+	void LaunchGame();
+	GAMESTATE* gameState;
 
 private:
-	UserInterface ui;
 };
 
