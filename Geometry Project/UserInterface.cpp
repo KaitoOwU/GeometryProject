@@ -1,8 +1,9 @@
 #include "UserInterface.h"
+#include "Game.h"
 
 void ButtonExit(Game* game)
 {
-	game->renderWindow->close();
+	game->CloseGame();
 }
 
 void ButtonPlay(Game* game)
@@ -29,51 +30,42 @@ UserInterface::~UserInterface()
 	delete rectMainMenuSize;
 }
 
-void UserInterface::DisplayUI(sf::RenderWindow& window)
+void UserInterface::DisplayMainMenu(sf::RenderWindow& window)
 {
-	switch (*(game->gameState))
+	std::list<Button>::iterator itButton = rectShapesMainMenu.begin();
+	while (itButton != rectShapesMainMenu.end())
 	{
-	case GAMESTATE::MENUOPEN:
-	{
-		std::list<Button>::iterator itButton = rectShapesMainMenu.begin();
-		while (itButton != rectShapesMainMenu.end())
-		{
-			window.draw(itButton->shape);
-			itButton++;
-		}
-		std::list<sf::Text>::iterator itText = textMainMenu.begin();
-		while (itText != textMainMenu.end())
-		{
-			window.draw(*itText);
-			itText++;
-		}
-		return;
+		window.draw(itButton->shape);
+		itButton++;
 	}
-	case GAMESTATE::PLAYING:
+	std::list<sf::Text>::iterator itText = textMainMenu.begin();
+	while (itText != textMainMenu.end())
 	{
-		std::list<sf::RectangleShape>::iterator it = rectShapesGUI.begin();
-		while (it != rectShapesGUI.end())
-		{
-			window.draw(*it);
-			it++;
-		}
-		return;
+		window.draw(*itText);
+		itText++;
 	}
-	case GAMESTATE::UPGRADING:
-	{
+	return;
+}
 
-		return;
-	}
-	case GAMESTATE::PAUSE:
+void UserInterface::DisplayGUI(sf::RenderWindow& window)
+{
+	std::list<sf::RectangleShape>::iterator it = rectShapesGUI.begin();
+	while (it != rectShapesGUI.end())
 	{
+		window.draw(*it);
+		it++;
+	}
+	return;
+}
 
-		return;
-	}
-	default:
-	{
-		return;
-	}
-	}
+void UserInterface::DisplayUpgradeMenu(sf::RenderWindow& window)
+{
+
+}
+
+void UserInterface::DisplayPauseMenu(sf::RenderWindow& window)
+{
+
 }
 
 void UserInterface::CheckClick(sf::Vector2i mousePosition, sf::RenderWindow& window, Game* game)

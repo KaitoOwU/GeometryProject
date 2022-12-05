@@ -8,7 +8,7 @@ Game::Game(sf::RenderWindow* window)
 	renderWindow = window;
 	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, window);
 	pEnemyManager = new EnemyManager(window);
-	pInputManager = new InputManager(pPlayer);
+	pInputManager = new InputManager(this);
 }
 
 Game::~Game()
@@ -27,7 +27,7 @@ void Game::Display(sf::RenderWindow& window)
 	{
 	case GAMESTATE::MENUOPEN:
 	{
-
+		ui->DisplayMainMenu(window);
 		break;
 	}
 	case GAMESTATE::PLAYING:
@@ -40,18 +40,18 @@ void Game::Display(sf::RenderWindow& window)
 			window.draw((*it)->shape);
 			it++;
 		}
+		ui->DisplayGUI(window);
 		return;
-
-		break;
 	}
 	case GAMESTATE::UPGRADING:
 	{
 
+		ui->DisplayUpgradeMenu(window);
 		break;
 	}
 	case GAMESTATE::PAUSE:
 	{
-
+		ui->DisplayPauseMenu(window);
 		break;
 	}
 	default:
@@ -59,8 +59,6 @@ void Game::Display(sf::RenderWindow& window)
 		break;
 	}
 	}
-	ui->DisplayUI(window);
-	
 }
 
 void Game::Update(float& deltaTime)
@@ -100,4 +98,25 @@ void Game::LaunchGame()
 {
 	*gameState = GAMESTATE::PLAYING;
 	std::cout << "Jeu lance" << std::endl;
+}
+
+void Game::CloseGame()
+{
+	renderWindow->close();
+}
+
+void Game::PauseGame()
+{
+	//pInputManager->inputs[sf::Keyboard::Key::Escape] = false;
+	switch (*gameState)
+	{
+	case PLAYING:
+		*gameState = PAUSE;
+		return;
+	case PAUSE:
+		*gameState = PLAYING;
+		return;
+	default:
+		return;
+	}
 }

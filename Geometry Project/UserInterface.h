@@ -26,21 +26,23 @@ class UserInterface
 public:
 	UserInterface(Game* game);
 	~UserInterface();
-	void DisplayUI(sf::RenderWindow& window);
+	void DisplayMainMenu(sf::RenderWindow& window);
+	void DisplayGUI(sf::RenderWindow& window);
+	void DisplayUpgradeMenu(sf::RenderWindow& window);
+	void DisplayPauseMenu(sf::RenderWindow& window);
 	sf::Font* gameFont;
 	void CheckClick(sf::Vector2i mousePosition, sf::RenderWindow& window, Game* game);
 	Game* game;
 
 private:
+	void InitRectShapesMainMenu();
+	void InitTextMainMenu();
+	void InitRectShapesGUI();
 	sf::Vector2f* rectMainMenuSize;
 	std::list<Button> rectShapesMainMenu;
 	std::list<sf::Text> textMainMenu;
 	std::list<sf::RectangleShape> rectShapesGUI;
-	void InitRectShapesMainMenu();
-	void InitTextMainMenu();
-	void InitRectShapesGUI();
 };
 
 void SetBothColor(sf::RectangleShape& rect, sf::Color fillColor, sf::Color outLinecolor);
 
-#include "Game.h"

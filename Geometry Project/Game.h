@@ -24,6 +24,8 @@ public:
 	void Display(sf::RenderWindow& window);
 	void Update(float& deltaTime);
 	void LaunchGame();
+	void CloseGame();
+	void PauseGame();
 	GAMESTATE* gameState;
 	Player* pPlayer;
 	EnemyManager* pEnemyManager;
