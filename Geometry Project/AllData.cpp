@@ -98,7 +98,7 @@ float GetDistanceToLine(sf::Vector2f position, sf::Vector2f a, sf::Vector2f b)
 	return GetMagnitude(proj - position);
 }
 
-float Clamp(float value, float min, float max)
+float Clamp(float& value, float min, float max)
 {
 	if (value < min) {
 		return min;

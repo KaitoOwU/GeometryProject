@@ -13,7 +13,6 @@ int main()
     float deltaTime = 0.f;
     // Game loop
     while (window.isOpen()) {
-        deltaTime = clock.restart().asSeconds();
         sf::Event event;
         while (window.pollEvent(event)) {
             // Process any input event here
