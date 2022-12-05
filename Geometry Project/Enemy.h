@@ -8,11 +8,12 @@
 class Enemy
 {
 public:
-	Enemy(float size, sf::Vector2f spawnPoint, sf::Color color, float maxHealth, float moveSpeed, float attackSpeed, float damage);
+	Enemy();
+	Enemy(float size, sf::Vector2f spawnPoint, sf::Color color,int numberOfSides, float maxHealth, float moveSpeed, float attackSpeed, float damage);
 	~Enemy();
 
-	Health* pEnemyHealth = nullptr;
-	CharacterStats* pEnemyStats = nullptr;
+	Health pEnemyHealth;
+	CharacterStats pEnemyStats;
 	sf::CircleShape shape;
 private:
 

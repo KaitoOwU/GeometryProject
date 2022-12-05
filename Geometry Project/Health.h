@@ -3,6 +3,7 @@
 class Health
 {
 public:
+	Health();
 	Health(float maxLife);
 	~Health();
 
