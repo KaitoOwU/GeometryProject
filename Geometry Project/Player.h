@@ -22,13 +22,12 @@ public:
 		Right = sf::Keyboard::D
 	};
 
-	Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, float* deltaTime, sf::RenderWindow* window);
+	Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window);
 	~Player();
 
-	void Move(std::map<sf::Keyboard::Key, bool>& inputs);
+	void Move(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime);
 	void Shoot();
 	void Display(sf::RenderWindow& window);
-	void Update(float deltaTime);
 
 private:
 	float* deltaTime;

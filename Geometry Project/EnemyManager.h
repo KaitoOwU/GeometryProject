@@ -8,7 +8,7 @@
 class EnemyManager
 {
 public:
-	EnemyManager(sf::RenderWindow &window);
+	EnemyManager(sf::RenderWindow* window);
 	~EnemyManager();
 
 	std::list<Enemy> enemyList;

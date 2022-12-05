@@ -1,11 +1,11 @@
 #include "UserInterface.h"
 
-void ButtonExit(sf::RenderWindow& window, Game* game)
+void ButtonExit(Game* game)
 {
-	window.close();
+	game->renderWindow->close();
 }
 
-void ButtonPlay(sf::RenderWindow& window, Game* game)
+void ButtonPlay(Game* game)
 {
 	game->LaunchGame();
 }
@@ -88,7 +88,7 @@ void UserInterface::CheckClick(sf::Vector2i mousePosition, sf::RenderWindow& win
 			if (IsOverlappingCircleOnBox((sf::Vector2f)mousePosition, 0.1f,
 				itButton->shape.getPosition(), itButton->shape.getSize()))
 			{
-				(*itButton->pButtonFunction)(window, game);
+				(*itButton->pButtonFunction)(game);
 			}
 			itButton++;
 		}

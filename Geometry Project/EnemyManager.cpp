@@ -1,8 +1,8 @@
 #include "EnemyManager.h"
 
-EnemyManager::EnemyManager(sf::RenderWindow &window)
+EnemyManager::EnemyManager(sf::RenderWindow* window)
 {
-	this->activeWindow = &window;
+	this->activeWindow = window;
 }
 
 EnemyManager::~EnemyManager()
