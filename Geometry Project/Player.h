@@ -28,9 +28,9 @@ public:
 	~Player();
 
 	void Move(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime);
-	void Shoot();
+	void Shoot(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime);
 	void Display(sf::RenderWindow& window);
 
-private:
-	float* deltaTime;
+	void UpdateProjectile(float& deltaTime);
+	void DisplayProjectile(sf::RenderWindow& window);
 };
