@@ -13,7 +13,6 @@ int main()
     float deltaTime = 0.f;
     // Game loop
     while (window.isOpen()) {
-        deltaTime = clock.restart().asSeconds();
         sf::Event event;
         while (window.pollEvent(event)) {
             // Process any input event here
@@ -26,6 +25,7 @@ int main()
                     break;
                 case sf::Event::KeyReleased:
                     game->pInputManager->ReleaseKey(event, deltaTime);
+                    game->pEnemyManager->SpawnEnemy(1);
                     break;
                 case sf::Event::MouseButtonPressed:
                     game->pEnemyManager->SpawnEnemy(1);
