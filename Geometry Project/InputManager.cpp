@@ -5,7 +5,7 @@ InputManager::InputManager(Player* pPlayer)
 	this->pPlayer = pPlayer;
 }
 
-void InputManager::PressKey(sf::Event& event)
+void InputManager::PressKey(sf::Event& event, float& deltaTime)
 {
 	if (event.key.code == sf::Keyboard::Z ||
 		event.key.code == sf::Keyboard::Q ||
@@ -13,10 +13,15 @@ void InputManager::PressKey(sf::Event& event)
 		event.key.code == sf::Keyboard::D ||
 		event.key.code == sf::Keyboard::Space) {
 		this->inputs[event.key.code] = true;
+
 	}
+	if (inputs[sf::Keyboard::Space]) {
+		pPlayer->Shoot();
+	}
+	pPlayer->Move(this->inputs, deltaTime);
 }
 
-void InputManager::ReleaseKey(sf::Event& event)
+void InputManager::ReleaseKey(sf::Event& event, float& deltaTime)
 {
 	if (event.key.code == sf::Keyboard::Z ||
 		event.key.code == sf::Keyboard::Q ||
@@ -25,8 +30,5 @@ void InputManager::ReleaseKey(sf::Event& event)
 		event.key.code == sf::Keyboard::Space) {
 		this->inputs[event.key.code] = false;
 	}
-}
-
-void InputManager::UpdatePlayer() {
-	pPlayer->UpdateInputs(this->inputs);
+	pPlayer->Move(this->inputs, deltaTime);
 }

@@ -6,14 +6,14 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y), "ChronoSpacer");
-    // Initialise everything below
-    Game* game = new Game();
+    sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y), "Xenophobia");
+    Game* game = new Game(&window);
     sf::Mouse mouse = sf::Mouse();
     sf::Clock clock;
     float deltaTime = 0.f;
     // Game loop
     while (window.isOpen()) {
+        deltaTime = clock.restart().asSeconds();
         sf::Event event;
         while (window.pollEvent(event)) {
             // Process any input event here
@@ -22,12 +22,19 @@ int main()
                     window.close();
                     break;
                 case sf::Event::KeyPressed:
+                    game->pInputManager->PressKey(event, deltaTime);
+                    break;
+                case sf::Event::KeyReleased:
+                    game->pInputManager->ReleaseKey(event, deltaTime);
                     break;
                 case sf::Event::MouseButtonPressed:
+                    game->pEnemyManager->SpawnEnemy(1);
+                    game->pInputManager->PressKey(event, deltaTime);
                     game->ui->CheckClick(mouse.getPosition(window),
                         window, game);
                     break;
                 default:
+                    game->pInputManager->ReleaseKey(event, deltaTime);
                     break;
             }
             if (event.type == sf::Event::Closed) {

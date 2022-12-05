@@ -1,79 +1,70 @@
 #include "Player.h"
+#include <iostream>
+#include <cmath>
 
-Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, float* deltaTime)
+Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window)
 {
 	sf::CircleShape shape;
 	shape.setRadius(size);
+	this->shape.setOrigin(this->shape.getRadius() / 2, this->shape.getRadius() / 2);
 	shape.setPosition(initialPosition);
 	shape.setFillColor(color);
 
 	this->shape = shape;
 	this->movementSpeed = movementSpeed;
-	this->deltaTime = deltaTime;
+	this->activeWindow = window;
 }
 
 Player::~Player()
 {
 }
 
-void Player::SetActiveWindow(sf::Window& window) {
-	this->activeWindow = &window;
-}
-
-void Player::Move(Player::MovementDirection* direction, int amount_of_value)
+void Player::Move(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime)
 {
-	sf::Vector2f vector = { 0, 0 };
-	for (int i = 0; i < amount_of_value; i++) {
-		switch (direction[i]) {
-		case Up:
-			vector.y += this->movementSpeed * *this->deltaTime;
-			break;
-		case Down:
-			vector.y -= this->movementSpeed * *this->deltaTime;
-			break;
-		case Left:
-			vector.x -= this->movementSpeed * *this->deltaTime;
-			break;
-		case Right:
-			vector.x += this->movementSpeed * *this->deltaTime;
-			break;
-		}
-	}
-	this->shape.setPosition(shape.getPosition() + vector);
-}
+	float px = shape.getPosition().x;
+	float py = shape.getPosition().y;
 
-void Player::UpdateInputs(std::map<sf::Keyboard::Key, bool>& inputs) {
 	auto it = inputs.begin();
-	std::list<MovementDirection> listKeys;
-
-	for (auto it = inputs.begin();
-		it != inputs.end(); ++it) {
+	while (it != inputs.end()) {
 		if (it->second) {
-			switch (it->first) {
-			case sf::Keyboard::Z:
-				listKeys.push_back(MovementDirection::Up);
+			switch ((Player::MovementDirection) it->first) {
+			case Player::Up:
+				py -= (this->movementSpeed *deltaTime);
 				break;
-			case sf::Keyboard::Q:
-				listKeys.push_back(MovementDirection::Left);
+			case Player::Down:
+				py += (this->movementSpeed * deltaTime);
 				break;
-			case sf::Keyboard::S:
-				listKeys.push_back(MovementDirection::Down);
+			case Player::Right:
+				px += (this->movementSpeed * deltaTime);
 				break;
-			case sf::Keyboard::D:
-				listKeys.push_back(MovementDirection::Right);
-				break;
-			case sf::Keyboard::Space:
-				//this->Shoot();
+			case Player::Left:
+				px -= (this->movementSpeed * deltaTime);
 				break;
 			}
 		}
+		it++;
 	}
 
-	MovementDirection* dir = new MovementDirection[listKeys.size()];
-	int i = 0;
-	for (auto it = listKeys.begin();
-		it != listKeys.end(); ++it) {
-		dir[i] = (*it);
+	this->shape.setPosition(
+		Clamp(px, 20, WINDOW_SIZE.x - 20),
+		Clamp(py, 20, WINDOW_SIZE.y - 20)
+	);
+}
+
+void Player::Shoot() {
+	if (shootCooldown <= 0) {
+		sf::Vector2f mousePos = activeWindow->mapPixelToCoords(sf::Mouse::getPosition());
+		sf::Vector2f projectileDir = Normalize({ mousePos.x - shape.getPosition().x, mousePos.y - shape.getPosition().y });
+
+		Projectile* proj = new Projectile(projectileDir, deltaTime);
+		proj->shape.setFillColor(sf::Color::Yellow);
+		proj->shape.setRadius(5.0f);
+		proj->shape.setPosition(shape.getPosition());
+		this->projectileList.push_back(proj);
 	}
-	this->Move(dir, i);
+}
+
+void Player::Display(sf::RenderWindow& window)
+{
+	window.draw(shape);
 }

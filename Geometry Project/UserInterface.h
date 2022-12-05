@@ -6,7 +6,7 @@
 #include <cmath>
 
 class Game;
-typedef void(*ButtonFunction)(sf::RenderWindow&, Game*);
+typedef void(*ButtonFunction)(Game*);
 
 struct Button {
 	sf::RectangleShape shape;
@@ -17,9 +17,9 @@ struct Button {
 	}
 };
 
-void ButtonExit(sf::RenderWindow& window, Game* game);
+void ButtonExit(Game* game);
 
-void ButtonPlay(sf::RenderWindow& window, Game* game);
+void ButtonPlay(Game* game);
 
 class UserInterface
 {
