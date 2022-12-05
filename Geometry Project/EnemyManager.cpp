@@ -62,9 +62,9 @@ void EnemyManager::OnPlayerDeath(Player* player)
 	this->canSpawn = false;
 	player->canMove = false;
 
-	std::list<Enemy>::iterator it = this->enemyList.begin();
-	while (it != this->enemyList.end())
-	{
-		it = enemyList.erase(it);
-	}
+	//std::list<Enemy>::iterator it = this->enemyList.begin();
+	//while (it != this->enemyList.end())
+	//{
+	//	it = enemyList.erase(it);
+	//}
 }
