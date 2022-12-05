@@ -5,8 +5,8 @@ Enemy::Enemy(float size, sf::Vector2f spawnPoint, sf::Color color, float maxHeal
 	sf::CircleShape shape;
 	this->shape = shape;
 	this->shape.setFillColor(color);
+	this->shape.setOrigin(sf::Vector2f({ this->shape.getRadius() / 2.f, this->shape.getRadius() / 2.f }));
 	this->shape.setPosition(spawnPoint);
-	this->shape.setOrigin(sf::Vector2f({ this->shape.getPosition().x / 2, this->shape.getPosition().y / 2 }));
 	this->shape.setRadius(size);
 
 	

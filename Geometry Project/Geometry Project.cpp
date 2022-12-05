@@ -13,7 +13,7 @@ int main()
     EnemyManager* pEnemyManager = new EnemyManager(window);
     InputManager* pInputManager = new InputManager(pPlayer);
 
-    pEnemyManager->SpawnEnemy(300);
+    
     // Game loop
     while (window.isOpen()) {
         deltaTime = clock.restart().asSeconds();
@@ -26,6 +26,7 @@ int main()
                 window.close();
                 break;
             case sf::Event::KeyPressed:
+                pEnemyManager->SpawnEnemy(1);
                 pInputManager->PressKey(event);
                 break;
             default:

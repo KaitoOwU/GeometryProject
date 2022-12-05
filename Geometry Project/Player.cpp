@@ -5,6 +5,7 @@ Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf
 {
 	sf::CircleShape shape;
 	shape.setRadius(size);
+	this->shape.setOrigin(this->shape.getRadius() / 2, this->shape.getRadius() / 2);
 	shape.setPosition(initialPosition);
 	shape.setFillColor(color);
 
@@ -19,7 +20,6 @@ Player::~Player()
 
 void Player::SetActiveWindow(sf::Window& window) {
 	this->activeWindow = &window;
-	this->shape.setOrigin(window.getSize().x / 2, window.getSize().y / 2);
 }
 
 void Player::Move(std::map<Player::MovementDirection, bool>& inputs)
