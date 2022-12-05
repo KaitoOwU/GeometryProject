@@ -8,9 +8,10 @@
 
 enum GAMESTATE
 {
-	PLAYING,
 	MENUOPEN,
+	PLAYING,
 	PAUSE,
+	UPGRADING,
 };
 
 class Game
@@ -22,8 +23,8 @@ public:
 	void Display(sf::RenderWindow& window);
 	void Update(float& deltaTime);
 	void LaunchGame();
+	GAMESTATE* gameState;
 
 private:
-	GAMESTATE* gameState = new GAMESTATE;
 };
 

@@ -24,20 +24,20 @@ void ButtonPlay(sf::RenderWindow& window, Game* game);
 class UserInterface
 {
 public:
-	UserInterface();
+	UserInterface(Game* game);
 	~UserInterface();
 	void DisplayUI(sf::RenderWindow& window);
-	sf::Font* gameFont = new sf::Font;
+	sf::Font* gameFont;
 	void CheckClick(sf::Vector2i mousePosition, sf::RenderWindow& window, Game* game);
-	bool* _isMainMenuDisplayed = new bool;
+	Game* game;
 
 private:
-	sf::Vector2f* rectMainMenuSize = new sf::Vector2f{500.f, 100.f};
+	sf::Vector2f* rectMainMenuSize;
 	std::list<Button> rectShapesMainMenu;
-	void InitRectShapesMainMenu();
 	std::list<sf::Text> textMainMenu;
-	void InitTextMainMenu();
 	std::list<sf::RectangleShape> rectShapesGUI;
+	void InitRectShapesMainMenu();
+	void InitTextMainMenu();
 	void InitRectShapesGUI();
 };
 

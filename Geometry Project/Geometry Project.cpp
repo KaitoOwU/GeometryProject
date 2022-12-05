@@ -44,4 +44,5 @@ int main()
 
         window.display();
     }
+    delete game;
 }

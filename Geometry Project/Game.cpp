@@ -2,12 +2,15 @@
 
 Game::Game()
 {
+	gameState = new GAMESTATE;
 	(*gameState) = GAMESTATE::MENUOPEN;
-	ui = new UserInterface();
+	ui = new UserInterface(this);
 }
 
 Game::~Game()
 {
+	delete ui;
+	delete gameState;
 }
 
 void Game::Display(sf::RenderWindow& window)
@@ -35,7 +38,6 @@ void Game::Update(float& deltaTime)
 
 void Game::LaunchGame()
 {
-	*ui->_isMainMenuDisplayed = false;
 	*gameState = GAMESTATE::PLAYING;
-	std::cout << "CA MARCHE" << std::endl;
+	std::cout << "Jeu lance" << std::endl;
 }
