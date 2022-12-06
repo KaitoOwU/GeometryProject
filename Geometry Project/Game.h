@@ -15,6 +15,13 @@ enum GAMESTATE
 	UPGRADING,
 };
 
+enum UPGRADES {
+	SPEED,
+	DAMAGE,
+	HEALTH,
+	MUTATION,
+};
+
 class Game
 {
 public:
@@ -24,6 +31,14 @@ public:
 	void Display(sf::RenderWindow& window);
 	void Update(float& deltaTime);
 	void LaunchGame();
+	void CloseGame();
+	void PauseGame();
+	void ResetGame();
+	void UpgadeSpeed();
+	void UpgadeDamage();
+	void UpgadeHealth();
+	void Mutate();
+	void UpgradePlayer(UPGRADES upgrade);
 	GAMESTATE* gameState;
 	Player* pPlayer;
 	EnemyManager* pEnemyManager;
