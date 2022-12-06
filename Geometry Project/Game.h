@@ -13,6 +13,7 @@ enum GAMESTATE
 	PLAYING,
 	PAUSE,
 	UPGRADING,
+	DEATH,
 };
 
 enum UPGRADES {
@@ -39,6 +40,9 @@ public:
 	void UpgadeHealth();
 	void Mutate();
 	void UpgradePlayer(UPGRADES upgrade);
+	void Death();
+	float* score;
+	float test = 1.f;
 	GAMESTATE* gameState;
 	Player* pPlayer;
 	EnemyManager* pEnemyManager;

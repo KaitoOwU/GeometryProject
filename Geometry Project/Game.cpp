@@ -6,6 +6,7 @@ Game::Game(sf::RenderWindow* window)
 	(*gameState) = GAMESTATE::MENUOPEN;
 	ui = new UserInterface(this);
 	renderWindow = window;
+	score = new float(0.f);
 	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, window);
 	pEnemyManager = new EnemyManager(window);
 	pInputManager = new InputManager(this);
@@ -18,6 +19,7 @@ Game::~Game()
 	delete pPlayer;
 	delete pEnemyManager;
 	delete pInputManager;
+	delete score;
 }
 
 void Game::Display(sf::RenderWindow& window)
@@ -35,18 +37,22 @@ void Game::Display(sf::RenderWindow& window)
 		pEnemyManager->DrawEnemy();
 		pPlayer->Display(window);
 		pPlayer->DisplayProjectile(window);
-
+		ui->DisplayGUI(window);
 		break;
 	}
 	case GAMESTATE::UPGRADING:
 	{
-
 		ui->DisplayUpgradeMenu(window);
 		break;
 	}
 	case GAMESTATE::PAUSE:
 	{
 		ui->DisplayPauseMenu(window);
+		break;
+	}
+	case GAMESTATE::DEATH:
+	{
+		ui->DisplayDeathMenu(window);
 		break;
 	}
 	default:
@@ -68,7 +74,6 @@ void Game::Update(float& deltaTime)
 		pPlayer->shootCooldown -= deltaTime;
 		pPlayer->Shoot(pInputManager->inputs, deltaTime);
 		pPlayer->UpdateProjectile(deltaTime);
-		
 	}
 	case MENUOPEN:
 		return;
@@ -82,7 +87,8 @@ void Game::Update(float& deltaTime)
 void Game::LaunchGame()
 {
 	*gameState = GAMESTATE::PLAYING;
-	std::cout << "Jeu lance" << std::endl;
+	//ui->UpdateGUI(pPlayer->health, pPlayer->maxHealth, 
+	//pPlayer->currentXP, pPlayer->xpforNextLevel, pPlayer->currentLevel, score);
 }
 
 void Game::CloseGame()
@@ -107,7 +113,11 @@ void Game::PauseGame()
 
 void Game::ResetGame()
 {
-	//A FAIRE
+	delete pPlayer;
+	delete pEnemyManager;
+	*score = 0;
+	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, renderWindow);
+	pEnemyManager = new EnemyManager(renderWindow);
 	*gameState = MENUOPEN;
 }
 
@@ -152,4 +162,10 @@ void Game::UpgradePlayer(UPGRADES upgrade)
 	default:
 		break;
 	}
+}
+
+void Game::Death()
+{
+	*gameState = DEATH;
+	ui->UpdateScore(score);
 }
