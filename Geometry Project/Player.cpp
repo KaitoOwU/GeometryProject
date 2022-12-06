@@ -21,6 +21,9 @@ Player::~Player()
 
 void Player::Move(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime)
 {
+	if (!this->canMove)
+		return;
+
 	float px = shape.getPosition().x;
 	float py = shape.getPosition().y;
 
@@ -62,6 +65,29 @@ void Player::Shoot(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime) 
 		proj->shape.setRadius(10.0f);
 		proj->shape.setPosition(shape.getPosition());
 		this->projectileList.push_back(proj);
+	}
+}
+
+void Player::UpdateProjectile(float& deltaTime) {
+	auto it = projectileList.begin();
+	while (it != projectileList.end()) {
+		(*it)->shape.move(((*it)->direction) / 4.f);
+		(*it)->lifeDuration -= deltaTime;
+		if ((*it)->lifeDuration <= 0) {
+			it = projectileList.erase(it);
+			continue;
+		}
+		it++;
+	}
+	return;
+}
+
+void Player::DisplayProjectile(sf::RenderWindow& window)
+{
+	auto it = projectileList.begin();
+	while (it != projectileList.end()) {
+		window.draw((*it)->shape);
+		it++;
 	}
 }
 

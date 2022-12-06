@@ -1,7 +1,7 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 #include "AllData.h"
 #include "Projectile.h"
-#include <SFML/Graphics.hpp>
 #include <map>
 #include <list>
 
@@ -13,6 +13,8 @@ public:
 	sf::RenderWindow* activeWindow = nullptr;
 	float shootCooldown = 1.0f;
 	std::list<Projectile*> projectileList;
+
+	bool canMove = true;
 
 	enum MovementDirection {
 		None = -1,
@@ -28,4 +30,7 @@ public:
 	void Move(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime);
 	void Shoot(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime);
 	void Display(sf::RenderWindow& window);
+
+	void UpdateProjectile(float& deltaTime);
+	void DisplayProjectile(sf::RenderWindow& window);
 };

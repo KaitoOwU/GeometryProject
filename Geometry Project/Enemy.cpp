@@ -17,4 +17,6 @@ Enemy::Enemy(float size, sf::Vector2f spawnPoint, sf::Color color, float maxHeal
 
 Enemy::~Enemy()
 {
+	//delete pEnemyHealth;
+	//delete pEnemyStats;
 }

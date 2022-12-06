@@ -25,6 +25,7 @@ int main()
                     break;
                 case sf::Event::KeyReleased:
                     game->pInputManager->ReleaseKey(event, deltaTime);
+                    game->pEnemyManager->SpawnEnemy(1);
                     break;
                 case sf::Event::MouseButtonPressed:
                     game->pEnemyManager->SpawnEnemy(1);
