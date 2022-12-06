@@ -8,7 +8,7 @@ Game::Game(sf::RenderWindow* window)
 	renderWindow = window;
 	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, window);
 	pEnemyManager = new EnemyManager(window);
-	pInputManager = new InputManager(pPlayer);
+	pInputManager = new InputManager(this);
 }
 
 Game::~Game()
@@ -27,7 +27,7 @@ void Game::Display(sf::RenderWindow& window)
 	{
 	case GAMESTATE::MENUOPEN:
 	{
-
+		ui->DisplayMainMenu(window);
 		break;
 	}
 	case GAMESTATE::PLAYING:
@@ -41,11 +41,12 @@ void Game::Display(sf::RenderWindow& window)
 	case GAMESTATE::UPGRADING:
 	{
 
+		ui->DisplayUpgradeMenu(window);
 		break;
 	}
 	case GAMESTATE::PAUSE:
 	{
-
+		ui->DisplayPauseMenu(window);
 		break;
 	}
 	default:
@@ -53,8 +54,6 @@ void Game::Display(sf::RenderWindow& window)
 		break;
 	}
 	}
-	ui->DisplayUI(window);
-	
 }
 
 void Game::Update(float& deltaTime)
@@ -84,4 +83,73 @@ void Game::LaunchGame()
 {
 	*gameState = GAMESTATE::PLAYING;
 	std::cout << "Jeu lance" << std::endl;
+}
+
+void Game::CloseGame()
+{
+	renderWindow->close();
+}
+
+void Game::PauseGame()
+{
+	switch (*gameState)
+	{
+	case PLAYING:
+		*gameState = PAUSE;
+		return;
+	case PAUSE:
+		*gameState = PLAYING;
+		return;
+	default:
+		return;
+	}
+}
+
+void Game::ResetGame()
+{
+	//A FAIRE
+	*gameState = MENUOPEN;
+}
+
+void Game::UpgadeSpeed()
+{
+	UpgradePlayer(UPGRADES::SPEED);
+}
+
+void Game::UpgadeDamage()
+{
+	UpgradePlayer(UPGRADES::DAMAGE);
+}
+
+void Game::UpgadeHealth()
+{
+	UpgradePlayer(UPGRADES::HEALTH);
+}
+
+void Game::Mutate()
+{
+	UpgradePlayer(UPGRADES::MUTATION);
+}
+
+void Game::UpgradePlayer(UPGRADES upgrade)
+{
+	*gameState = GAMESTATE::PLAYING;
+	//Insert upgrade function here (KEVIN)
+	switch (upgrade)
+	{
+	case SPEED:
+		std::cout << "Speed upgraded" << std::endl;
+		break;
+	case DAMAGE:
+		std::cout << "Damage upgraded" << std::endl;
+		break;
+	case HEALTH:
+		std::cout << "Health upgraded" << std::endl;
+		break;
+	case MUTATION:
+		std::cout << "Mutation" << std::endl;
+		break;
+	default:
+		break;
+	}
 }
