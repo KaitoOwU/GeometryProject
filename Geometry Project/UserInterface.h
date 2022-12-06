@@ -9,6 +9,7 @@ class Game;
 
 typedef void(*ButtonMenuBehaviour)(Game* game);
 
+
 struct Button {
 	sf::RectangleShape shape;
 	ButtonMenuBehaviour pButtonFunction;
@@ -21,6 +22,10 @@ struct Button {
 void ButtonPlay(Game* game);
 void ButtonReset(Game* game);
 void ButtonExit(Game* game);
+void UpgadeSpeed(Game* game);
+void UpgadeDamage(Game* game);
+void UpgadeHealth(Game* game);
+void Mutate(Game* game);
 
 class UserInterface
 {
@@ -42,6 +47,8 @@ private:
 	void InitRectShapesGUI();
 	void InitRectShapesPauseMenu();
 	void InitTextPauseMenu();
+	void InitRectShapesUpgradeMenu();
+	void InitTextUpgradeMenu();
 	sf::Vector2f* rectMainMenuSize;
 	std::list<Button> rectShapesMainMenu;
 	std::list<sf::Text> textMainMenu;

@@ -107,7 +107,6 @@ void Game::CloseGame()
 
 void Game::PauseGame()
 {
-	//pInputManager->inputs[sf::Keyboard::Key::Escape] = false;
 	switch (*gameState)
 	{
 	case PLAYING:
@@ -127,17 +126,43 @@ void Game::ResetGame()
 	*gameState = MENUOPEN;
 }
 
+void Game::UpgadeSpeed()
+{
+	UpgradePlayer(UPGRADES::SPEED);
+}
+
+void Game::UpgadeDamage()
+{
+	UpgradePlayer(UPGRADES::DAMAGE);
+}
+
+void Game::UpgadeHealth()
+{
+	UpgradePlayer(UPGRADES::HEALTH);
+}
+
+void Game::Mutate()
+{
+	UpgradePlayer(UPGRADES::MUTATION);
+}
+
 void Game::UpgradePlayer(UPGRADES upgrade)
 {
+	*gameState = GAMESTATE::PLAYING;
+	//Insert upgrade function here (KEVIN)
 	switch (upgrade)
 	{
 	case SPEED:
+		std::cout << "Speed upgraded" << std::endl;
 		break;
 	case DAMAGE:
+		std::cout << "Damage upgraded" << std::endl;
 		break;
 	case HEALTH:
+		std::cout << "Health upgraded" << std::endl;
 		break;
 	case MUTATION:
+		std::cout << "Mutation" << std::endl;
 		break;
 	default:
 		break;

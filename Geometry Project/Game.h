@@ -34,6 +34,10 @@ public:
 	void CloseGame();
 	void PauseGame();
 	void ResetGame();
+	void UpgadeSpeed();
+	void UpgadeDamage();
+	void UpgadeHealth();
+	void Mutate();
 	void UpgradePlayer(UPGRADES upgrade);
 	GAMESTATE* gameState;
 	Player* pPlayer;

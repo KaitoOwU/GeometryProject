@@ -16,6 +16,26 @@ void ButtonExit(Game* game)
 	game->CloseGame();
 }
 
+void UpgadeSpeed(Game* game) 
+{
+	game->UpgadeSpeed();
+}
+
+void UpgadeDamage(Game* game) 
+{
+	game->UpgadeDamage();
+}
+
+void UpgadeHealth(Game* game) 
+{
+	game->UpgadeHealth();
+}
+
+void Mutate(Game* game) 
+{
+	game->Mutate();
+}
+
 UserInterface::UserInterface(Game* game)
 {
 	gameFont = new sf::Font;
@@ -23,12 +43,14 @@ UserInterface::UserInterface(Game* game)
 	this->game = game;
 	rectMainMenuSize = new sf::Vector2f;
 	*rectMainMenuSize = sf::Vector2f{ 500.f, 100.f };
-	//Init shapes containers
+	
 	InitRectShapesMainMenu();
 	InitTextMainMenu();
 	InitRectShapesGUI();
 	InitRectShapesPauseMenu();
 	InitTextPauseMenu();
+	InitRectShapesUpgradeMenu();
+	InitTextUpgradeMenu();
 }
 
 UserInterface::~UserInterface()
@@ -67,7 +89,19 @@ void UserInterface::DisplayGUI(sf::RenderWindow& window)
 
 void UserInterface::DisplayUpgradeMenu(sf::RenderWindow& window)
 {
-
+	std::list<Button>::iterator itButton = rectShapesUpgradeMenu.begin();
+	while (itButton != rectShapesUpgradeMenu.end())
+	{
+		window.draw(itButton->shape);
+		itButton++;
+	}
+	std::list<sf::Text>::iterator itText = textUpgradeMenu.begin();
+	while (itText != textUpgradeMenu.end())
+	{
+		window.draw(*itText);
+		itText++;
+	}
+	return;
 }
 
 void UserInterface::DisplayPauseMenu(sf::RenderWindow& window)
@@ -107,7 +141,16 @@ void UserInterface::CheckClick(sf::Vector2i mousePosition, sf::RenderWindow& win
 	}
 	case GAMESTATE::UPGRADING:
 	{
-
+		std::list<Button>::iterator itButton = rectShapesUpgradeMenu.begin();
+		while (itButton != rectShapesUpgradeMenu.end())
+		{
+			if (IsOverlappingCircleOnBox((sf::Vector2f)mousePosition, 0.1f,
+				itButton->shape.getPosition(), itButton->shape.getSize()))
+			{
+				(*itButton->pButtonFunction)(game);
+			}
+			itButton++;
+		}
 		return;
 	}
 	case GAMESTATE::PAUSE:
@@ -225,6 +268,47 @@ void UserInterface::InitTextPauseMenu()
 	textPauseMenu.push_back(text);
 }
 
+void UserInterface::InitRectShapesUpgradeMenu() {
+	rectShapesUpgradeMenu.clear();
+	sf::RectangleShape rect;
+	SetBothColor(rect, sf::Color::Black, sf::Color::White);
+	rect.setSize({WINDOW_SIZE.x - 40.f , WINDOW_SIZE.y / 4.f - 25.f });
+	rect.setOrigin({ rect.getSize().x / 2.f ,rect.getSize().y / 2.f });
+	rect.setPosition({ WINDOW_SIZE.x / 2.f,
+		WINDOW_SIZE.y * (1.f / 4.f) - rect.getSize().y /2.f - 10.f });
+	rectShapesUpgradeMenu.push_back(Button(rect, &UpgadeSpeed));
+	rect.setPosition({ WINDOW_SIZE.x / 2.f,
+		WINDOW_SIZE.y * (2.f / 4.f) - rect.getSize().y / 2.f - 10.f });
+	rectShapesUpgradeMenu.push_back(Button(rect, &UpgadeDamage));
+	rect.setPosition({ WINDOW_SIZE.x / 2.f,
+		WINDOW_SIZE.y * (3.f / 4.f) - rect.getSize().y / 2.f - 10.f });
+	rectShapesUpgradeMenu.push_back(Button(rect, &UpgadeHealth));
+	rect.setPosition({ WINDOW_SIZE.x / 2.f,
+		WINDOW_SIZE.y * (4.f / 4.f) - rect.getSize().y / 2.f - 10.f });
+	rectShapesUpgradeMenu.push_back(Button(rect, &Mutate));
+}
+
+void UserInterface::InitTextUpgradeMenu() {
+	textUpgradeMenu.clear();
+	sf::Text text;
+	text.setFont(*gameFont);
+	text.setStyle(sf::Text::Bold);
+	text.setFillColor(sf::Color::White);
+	text.setCharacterSize(40);
+	text.setPosition({ 40.f, 100.f });
+	text.setString("Speed Upgrade");
+	textUpgradeMenu.push_back(text);
+	text.setPosition({ 40.f, 350.f });
+	text.setString("Damage Upgrade");
+	textUpgradeMenu.push_back(text);
+	text.setPosition({ 40.f, 600.f });
+	text.setString("Health Upgrade");
+	textUpgradeMenu.push_back(text);
+	//MUTATE
+	text.setPosition({ WINDOW_SIZE.x / 2.f - 70.f,850.f });
+	text.setString("Mutate");
+	textUpgradeMenu.push_back(text);
+}
 
 void SetBothColor(sf::RectangleShape& rect, sf::Color fillColor, sf::Color outLinecolor)
 {
@@ -232,10 +316,3 @@ void SetBothColor(sf::RectangleShape& rect, sf::Color fillColor, sf::Color outLi
 	rect.setOutlineColor(outLinecolor);
 	rect.setOutlineThickness(2.f);
 }
-
-//ButtonUpgrade::ButtonUpgrade(sf::RectangleShape& rect, ButtonUpgradeBehaviour& buttonUpgrade)
-//{
-//		shape = rect;
-//		pButtonUpgrade = buttonUpgrade;
-//}
-
