@@ -9,7 +9,7 @@ class Enemy
 {
 public:
 	Enemy();
-	Enemy(float size, sf::Vector2f spawnPoint, sf::Color color,int numberOfSides, float maxHealth, float moveSpeed, float attackSpeed, float damage);
+	Enemy(float size, sf::Vector2f spawnPoint,int numberOfSides, float maxHealth, float moveSpeed, float attackSpeed, float damage);
 	~Enemy();
 
 	Health pEnemyHealth;

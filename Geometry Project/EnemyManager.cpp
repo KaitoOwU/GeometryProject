@@ -3,7 +3,9 @@
 EnemyManager::EnemyManager(sf::RenderWindow* window)
 {
 	this->activeWindow = window;
-	enemyPrefab.push_back(Enemy(20, {0,0}, sf::Color::Yellow, 4, 100.0f, 100.0f, 1.0f, 10.0f));
+	enemyPrefab.push_back(Enemy(20, {0,0}, 4, 100.0f, 80.0f, 1.0f, 10.0f)); // square enemy
+	enemyPrefab.push_back(Enemy(25, {0,0}, 6, 100.0f, 100.0f, 1.0f, 10.0f)); // hexagone enemy
+	enemyPrefab.push_back(Enemy(30, {0,0}, 8, 100.0f, 120.0f, 1.0f, 10.0f)); // hoctogone enemy
 }
 
 EnemyManager::~EnemyManager()
@@ -17,9 +19,17 @@ void EnemyManager::SpawnEnemy(int amount)
 
 	for (int i = 0; i < amount; i++)
 	{
-		int index = rand() % this->spawnPoints.size();
-		//put enemy
+		int spawnIndex = rand() % this->spawnPoints.size();
+		int colorIndex = rand() % this->enemyColor.size();
+		int enemyIndex = rand() % this->enemyPrefab.size();
+
+		Enemy newEnemy = enemyPrefab[enemyIndex];
+		newEnemy.shape.setFillColor(enemyColor[colorIndex]);
+		newEnemy.shape.setPosition(spawnPoints[spawnIndex]);
+		
+		enemyList.push_back(newEnemy);
 	}
+
 }
 
 void EnemyManager::TrackPlayer(Player *pPlayer, float &deltaTime)
@@ -63,5 +73,5 @@ void EnemyManager::OnPlayerDeath(Player* player)
 	this->canSpawn = false;
 	player->canMove = false;
 
-	enemyList.clear();
+	//enemyList.clear();
 }

@@ -13,7 +13,8 @@ public:
 
 	std::list<Enemy> enemyList;
 	std::vector < sf::Vector2f> spawnPoints = {{0,0}, {1000,1000}, {1000,0}, {0,1000}, {500,0}, {0,500}, {1000,500}, {500,1000}};
-	std::list<Enemy> enemyPrefab;
+	std::vector < sf::Color> enemyColor = { sf::Color::Blue,sf::Color::Magenta,sf::Color::Cyan,sf::Color::Yellow, sf::Color::White };
+	std::vector<Enemy> enemyPrefab;
 	sf::RenderWindow* activeWindow = nullptr;
 
 	bool canSpawn = true;
