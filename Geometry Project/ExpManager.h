@@ -4,8 +4,6 @@
 #include "Exp.h"
 #include "Player.h"
 
-class Player;
-
 class ExpManager
 {
 public:

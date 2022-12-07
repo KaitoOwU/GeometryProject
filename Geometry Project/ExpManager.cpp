@@ -29,11 +29,11 @@ void ExpManager::ExpTrackPlayer(Player* pPlayer, float& deltaTime)
 	std::list<Exp>::iterator it = this->experienceOrbList.begin();
 	while (it != this->experienceOrbList.end())
 	{
-		if (IsOverlappingCircleOnCircle((*it).shape.getPosition(), (*it).shape.getRadius() * 20, pPlayer->shape.getPosition(), pPlayer->shape.getRadius()))
+		if (IsOverlappingCircleOnCircle((*it).shape.getPosition(), (*it).shape.getRadius() * 10, pPlayer->shape.getPosition(), pPlayer->shape.getRadius()))
 		{
 			sf::Vector2f target = { pPlayer->shape.getPosition() + pPlayer->shape.getOrigin() - (*it).shape.getPosition() - (*it).shape.getOrigin() };
 			target = Normalize(target);
-			(*it).shape.setPosition(sf::Vector2f{ (*it).shape.getPosition().x + target.x * deltaTime * 100.0f, (*it).shape.getPosition().y + target.y * deltaTime * 100.0f });
+			(*it).shape.setPosition(sf::Vector2f{ (*it).shape.getPosition().x + target.x * deltaTime * 10.0f, (*it).shape.getPosition().y + target.y * deltaTime * 10.0f });
 		}
 
 		if (IsOverlappingCircleOnCircle((*it).shape.getPosition(), (*it).shape.getRadius(), pPlayer->shape.getPosition(), pPlayer->shape.getRadius()))

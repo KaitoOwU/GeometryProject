@@ -2,13 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "AllData.h"
 #include "Projectiles.h"
-#include "EnemyManager.h"
 #include <map>
 #include <list>
-
-class EnemyManager;
-class PlayerCircleProjectile;
-class PlayerTriangleProjectile;
 
 class Player
 {
@@ -41,7 +36,6 @@ public:
 	std::list<PlayerCircleProjectile*> circleProjList;
 	std::list<PlayerTriangleProjectile*> triangleProjList;
 	ActiveProjectileType projectileType = ActiveProjectileType::Circle;
-	EnemyManager* pEnemyManager = nullptr;
 
 	float maxHealth = 100.f;
 	float health = maxHealth;
@@ -82,7 +76,7 @@ public:
 
 	bool canMove = true;
 
-	Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window, EnemyManager* pEnemyManager);
+	Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window);
 	~Player();
 
 	void ComputeIfNextLevel();
@@ -97,7 +91,6 @@ public:
 	void UpdateProjectile(float& deltaTime);
 	void DisplayProjectile(sf::RenderWindow& window);
 
-	void DetectProjectilCollision();
 private:
 	int numberOfBalls = 1;
 };
