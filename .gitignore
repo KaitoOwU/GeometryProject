@@ -17,6 +17,7 @@
 mono_crash.*
 
 # Build results
+Geometry Project/Geometry Project.cpp
 external/
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -349,5 +350,3 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-
-Geometry Project/Geometry Project.cpp
