@@ -36,8 +36,10 @@ public:
 	void DisplayGUI(sf::RenderWindow& window);
 	void DisplayUpgradeMenu(sf::RenderWindow& window);
 	void DisplayPauseMenu(sf::RenderWindow& window);
+	void DisplayDeathMenu(sf::RenderWindow& window);
 	void CheckClick(sf::Vector2i mousePosition, sf::RenderWindow& window, Game* game);
-	void UpdateGUI(float& currentHealth, float& maxHealth, float& currentXP, float& xpNextLevel);
+	void UpdateGUI(float& currentHealth, float& maxHealth, float& currentXP, float& xpForNextLevel, float& level, float* score);
+	void UpdateScore(float* newScore);
 	sf::Font* gameFont;
 	Game* game;
 
@@ -45,19 +47,24 @@ private:
 	void InitRectShapesMainMenu();
 	void InitTextMainMenu();
 	void InitRectShapesGUI();
+	void InitTextGUI();
 	void InitRectShapesPauseMenu();
 	void InitTextPauseMenu();
 	void InitRectShapesUpgradeMenu();
 	void InitTextUpgradeMenu();
+	void InitRectShapesDeathMenu();
+	void InitTextDeathMenu();
 	sf::Vector2f* rectMainMenuSize;
 	std::list<Button> rectShapesMainMenu;
 	std::list<sf::Text> textMainMenu;
 	std::list<sf::RectangleShape> rectShapesGUI;
+	std::list<sf::Text> textGUI;
 	std::list<Button> rectShapesPauseMenu;
 	std::list<sf::Text> textPauseMenu;
 	std::list<Button> rectShapesUpgradeMenu;
 	std::list<sf::Text> textUpgradeMenu;
-
+	std::list<Button> rectShapesDeathMenu;
+	std::list<sf::Text> textDeathMenu;
 };
 
 void SetBothColor(sf::RectangleShape& rect, sf::Color fillColor, sf::Color outLinecolor);

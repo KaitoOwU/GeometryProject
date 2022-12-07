@@ -47,10 +47,13 @@ UserInterface::UserInterface(Game* game)
 	InitRectShapesMainMenu();
 	InitTextMainMenu();
 	InitRectShapesGUI();
+	InitTextGUI();
 	InitRectShapesPauseMenu();
 	InitTextPauseMenu();
 	InitRectShapesUpgradeMenu();
 	InitTextUpgradeMenu();
+	InitRectShapesDeathMenu();
+	InitTextDeathMenu();
 }
 
 UserInterface::~UserInterface()
@@ -78,11 +81,17 @@ void UserInterface::DisplayMainMenu(sf::RenderWindow& window)
 
 void UserInterface::DisplayGUI(sf::RenderWindow& window)
 {
-	std::list<sf::RectangleShape>::iterator it = rectShapesGUI.begin();
-	while (it != rectShapesGUI.end())
+	std::list<sf::RectangleShape>::iterator itShape = rectShapesGUI.begin();
+	while (itShape != rectShapesGUI.end())
 	{
-		window.draw(*it);
-		it++;
+		window.draw(*itShape);
+		itShape++;
+	}
+	std::list<sf::Text>::iterator itText = textGUI.begin();
+	while (itText != textGUI.end())
+	{
+		window.draw(*itText);
+		itText++;
 	}
 	return;
 }
@@ -114,6 +123,23 @@ void UserInterface::DisplayPauseMenu(sf::RenderWindow& window)
 	}
 	std::list<sf::Text>::iterator itText = textPauseMenu.begin();
 	while (itText != textPauseMenu.end())
+	{
+		window.draw(*itText);
+		itText++;
+	}
+	return;
+}
+
+void UserInterface::DisplayDeathMenu(sf::RenderWindow& window) 
+{
+	std::list<Button>::iterator itButton = rectShapesDeathMenu.begin();
+	while (itButton != rectShapesDeathMenu.end())
+	{
+		window.draw(itButton->shape);
+		itButton++;
+	}
+	std::list<sf::Text>::iterator itText = textDeathMenu.begin();
+	while (itText != textDeathMenu.end())
 	{
 		window.draw(*itText);
 		itText++;
@@ -167,6 +193,20 @@ void UserInterface::CheckClick(sf::Vector2i mousePosition, sf::RenderWindow& win
 		}
 		return;
 	}
+	case GAMESTATE::DEATH:
+	{
+		std::list<Button>::iterator itButton = rectShapesDeathMenu.begin();
+		while (itButton != rectShapesDeathMenu.end())
+		{
+			if (IsOverlappingCircleOnBox((sf::Vector2f)mousePosition, 0.1f,
+				itButton->shape.getPosition(), itButton->shape.getSize()))
+			{
+				(*itButton->pButtonFunction)(game);
+			}
+			itButton++;
+		}
+		return;
+	}
 	default:
 	{
 		return;
@@ -174,14 +214,28 @@ void UserInterface::CheckClick(sf::Vector2i mousePosition, sf::RenderWindow& win
 	}
 }
 
-void UserInterface::UpdateGUI(float& currentHealth, float& maxHealth, float& currentXP, float& xpNextLevel)
-{
+void UserInterface::UpdateGUI(float& currentHealth, float& maxHealth, float& currentXP, float& xpForNextLevel, float& level, float* score){
+	if (maxHealth <= 0 || xpForNextLevel <= 0) return;
 	std::list<sf::RectangleShape>::iterator it = rectShapesGUI.begin();
+	it++;
 	it->setSize({ it->getOutlineThickness()* 2.f 
 		+ 300.f * currentHealth/maxHealth , 50.f});
 	it++;
+	it++;
 	it->setSize({ it->getOutlineThickness() * 2.f
-	+ 500.f * currentXP/ xpNextLevel , 50.f });
+	+ 500.f * currentXP/ xpForNextLevel , 50.f });
+	textGUI.end()->setString("LVL: " + std::to_string(level));
+}
+
+void UserInterface::UpdateScore(float* newScore)
+{
+	std::list<sf::Text>::iterator it = textDeathMenu.begin();
+	it++;
+	it++;
+	it->setFillColor(sf::Color::Red);
+	it->setCharacterSize(100);
+	it->setPosition(180, 150);
+	it->setString("Score : " + std::to_string((int)*newScore));
 }
 
 void UserInterface::InitRectShapesMainMenu()
@@ -222,16 +276,40 @@ void UserInterface::InitRectShapesGUI()
 {
 	rectShapesGUI.clear();
 	sf::RectangleShape rect;
-	SetBothColor(rect, sf::Color::Red, sf::Color::White);
-	rect.setSize({ rect.getOutlineThickness() * 2.f + 300.f , 50.f });
+	SetBothColor(rect, sf::Color::Transparent, sf::Color::White);
+	rect.setSize({ rect.getOutlineThickness() * 2.f + 300.f ,
+		rect.getOutlineThickness() * 2.f + 50.f });
 	rect.setOrigin(rect.getSize() / 2.f);
 	rect.setPosition(rect.getOrigin() + sf::Vector2f{50.f, 35.f});
 	rectShapesGUI.push_back(rect);
-	SetBothColor(rect, sf::Color::Yellow, sf::Color::White);
-	rect.setSize({ rect.getOutlineThickness() * 2.f + 500.f , 50.f });
+	rect.setSize({ 300.f , 50.f });
+	rect.setOrigin(rect.getSize() / 2.f);
+	rect.setFillColor(sf::Color::Red);
+	rect.setOutlineThickness(0.f);
+	rectShapesGUI.push_back(rect);
+	SetBothColor(rect, sf::Color::Transparent, sf::Color::White);
+	rect.setSize({ rect.getOutlineThickness() * 2.f + 500.f ,
+		rect.getOutlineThickness() * 2.f + 50.f });
 	rect.setOrigin(rect.getSize() / 2.f);
 	rect.setPosition(WINDOW_SIZE.x / 2.f, WINDOW_SIZE.y - 60.f);
 	rectShapesGUI.push_back(rect);
+	rect.setSize({ 500.f , 50.f });
+	rect.setOrigin(rect.getSize() / 2.f);
+	rect.setFillColor(sf::Color::Green);
+	rect.setOutlineThickness(0.f);
+	rectShapesGUI.push_back(rect);
+}
+
+void UserInterface::InitTextGUI() 
+{
+	textGUI.clear();
+	sf::Text text;
+	text.setFont(*gameFont);
+	text.setString("LVL:");
+	text.setCharacterSize(30);
+	text.setFillColor(sf::Color::Green);
+	text.setPosition(WINDOW_SIZE.x / 2.f + 270.f, WINDOW_SIZE.y - 77.f);
+	textGUI.push_back(text);
 }
 
 void UserInterface::InitRectShapesPauseMenu() 
@@ -308,6 +386,40 @@ void UserInterface::InitTextUpgradeMenu() {
 	text.setPosition({ WINDOW_SIZE.x / 2.f - 70.f,850.f });
 	text.setString("Mutate");
 	textUpgradeMenu.push_back(text);
+}
+
+void UserInterface::InitRectShapesDeathMenu()
+{
+	rectShapesDeathMenu.clear();
+	sf::RectangleShape rect;
+	rect.setSize(*rectMainMenuSize);
+	SetBothColor(rect, sf::Color::Black, sf::Color::White);
+	rect.setOrigin({ rect.getSize().x / 2.f ,rect.getSize().y / 2.f });
+	rect.setPosition({ WINDOW_SIZE.x / 2.f,WINDOW_SIZE.y * (2.f / 4.f) });
+	rectShapesDeathMenu.push_back(Button(rect, &ButtonReset));
+	rect.setPosition({ WINDOW_SIZE.x / 2.f,WINDOW_SIZE.y * (3.f / 4.f) });
+	rectShapesDeathMenu.push_back(Button(rect, &ButtonExit));
+}
+
+void UserInterface::InitTextDeathMenu()
+{
+	textDeathMenu.clear();
+	sf::Text text;
+	text.setFont(*gameFont);
+	text.setStyle(sf::Text::Bold);
+	text.setFillColor(sf::Color::White);
+	text.setCharacterSize(24);
+	text.setPosition(WINDOW_SIZE / 2.f + sf::Vector2f{ -45.f, -15.f });
+	text.setString("Menu");
+	textDeathMenu.push_back(text);
+	text.setPosition(sf::Vector2f{ WINDOW_SIZE.x / 2.f,WINDOW_SIZE.y * (3.f / 4.f) } + sf::Vector2f{ -45.f, -15.f });
+	text.setString("Quit");
+	textDeathMenu.push_back(text);
+	text.setFillColor(sf::Color::Red);
+	text.setCharacterSize(100);
+	text.setPosition(180, 150);
+	text.setString("Score : ");
+	textDeathMenu.push_back(text);
 }
 
 void SetBothColor(sf::RectangleShape& rect, sf::Color fillColor, sf::Color outLinecolor)
