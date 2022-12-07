@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cmath>
 
-Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window)
+Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window, EnemyManager* pEnemyManager)
 {
 	sf::CircleShape shape;
 	shape.setRadius(size);
@@ -13,6 +13,7 @@ Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf
 	this->shape = shape;
 	this->movementSpeed = movementSpeed;
 	this->activeWindow = window;
+	this->pEnemyManager = pEnemyManager;
 }
 
 Player::~Player()
@@ -64,7 +65,7 @@ void Player::Shoot(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime) 
 			target = target - playerPos;
 			sf::Vector2f projectileDir = Normalize(target);
 
-			PlayerCircleProjectile* proj = new PlayerCircleProjectile(projectileDir, &deltaTime);
+			PlayerCircleProjectile* proj = new PlayerCircleProjectile(projectileDir, &deltaTime, pEnemyManager);
 			proj->shape.setFillColor(sf::Color::Magenta);
 			proj->shape.setRadius(10.f);
 			proj->shape.setPosition(shape.getPosition());
@@ -78,7 +79,7 @@ void Player::Shoot(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime) 
 
 			shootCooldown = 3.f;
 
-			PlayerTriangleProjectile* proj = new PlayerTriangleProjectile(&deltaTime);
+			PlayerTriangleProjectile* proj = new PlayerTriangleProjectile(&deltaTime, pEnemyManager);
 			proj->shape.setFillColor(sf::Color::Magenta);
 			proj->shape.setPosition(shape.getPosition());
 			proj->shape.setPointCount(3);
@@ -146,4 +147,32 @@ void Player::DisplayProjectile(sf::RenderWindow& window)
 void Player::Display(sf::RenderWindow& window)
 {
 	window.draw(shape);
+}
+
+void Player::DetectProjectilCollision()
+{
+	if (circleProjList.size() <= 0 || pEnemyManager->enemyList.size() <= 0)
+		return;
+
+
+	std::list<PlayerCircleProjectile*>::iterator it = circleProjList.begin();
+	while (it != circleProjList.end())
+	{
+		std::list<Enemy>::iterator eit = pEnemyManager->enemyList.begin();
+		while (eit != pEnemyManager->enemyList.end())
+		{
+			if (IsOverlappingCircleOnCircle((*it)->shape.getPosition(), (*it)->shape.getRadius(), (*eit).shape.getPosition(), (*eit).shape.getRadius()))
+			{
+				//it = circleProjList.erase(it);
+				(*eit).pEnemyHealth.TakeDamage(1);
+				std::cout << "oui oui baguette" << std::endl;
+				break;
+			}
+			else
+			{
+				eit++;
+			}
+		}
+		it++;
+	}
 }

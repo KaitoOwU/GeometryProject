@@ -21,11 +21,6 @@ void Health::TakeDamage(float value)
 	if (value > 0)
 	{
 		this->currentLife -= value;
-		if (this->currentLife < 0)
-		{
-			this->currentLife = 0;
-			delete this;
-		}
 	}
 }
 

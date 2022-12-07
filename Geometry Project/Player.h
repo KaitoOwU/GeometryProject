@@ -2,8 +2,13 @@
 #include <SFML/Graphics.hpp>
 #include "AllData.h"
 #include "Projectiles.h"
+#include "EnemyManager.h"
 #include <map>
 #include <list>
+
+class EnemyManager;
+class PlayerCircleProjectile;
+class PlayerTriangleProjectile;
 
 class Player
 {
@@ -29,10 +34,11 @@ public:
 	std::list<PlayerCircleProjectile*> circleProjList;
 	std::list<PlayerTriangleProjectile*> triangleProjList;
 	ActiveProjectileType projectileType = ActiveProjectileType::Circle;
+	EnemyManager* pEnemyManager = nullptr;
 
 	bool canMove = true;
 
-	Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window);
+	Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window, EnemyManager* pEnemyManager);
 	~Player();
 
 	void Move(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime);
@@ -42,4 +48,6 @@ public:
 
 	void UpdateProjectile(float& deltaTime);
 	void DisplayProjectile(sf::RenderWindow& window);
+
+	void DetectProjectilCollision();
 };

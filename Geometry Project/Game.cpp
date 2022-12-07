@@ -7,9 +7,9 @@ Game::Game(sf::RenderWindow* window)
 	ui = new UserInterface(this);
 	renderWindow = window;
 	score = new float(0.f);
-	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, window);
 	pExpManager = new ExpManager(window);
 	pEnemyManager = new EnemyManager(window, pExpManager);
+	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, window, pEnemyManager);
 	pInputManager = new InputManager(this);
 }
 
@@ -77,6 +77,7 @@ void Game::Update(float& deltaTime)
 		pPlayer->shootCooldown -= deltaTime;
 		pPlayer->Shoot(pInputManager->inputs, deltaTime);
 		pPlayer->UpdateProjectile(deltaTime);
+		pPlayer->DetectProjectilCollision();
 	}
 	case MENUOPEN:
 		return;
@@ -119,7 +120,7 @@ void Game::ResetGame()
 	delete pPlayer;
 	delete pEnemyManager;
 	*score = 0;
-	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, renderWindow);
+	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, renderWindow, pEnemyManager);
 	pEnemyManager = new EnemyManager(renderWindow, pExpManager);
 	*gameState = MENUOPEN;
 }

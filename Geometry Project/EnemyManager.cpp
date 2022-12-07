@@ -1,4 +1,6 @@
 #include "EnemyManager.h"
+#include "Player.h"
+#include "ExpManager.h"
 
 EnemyManager::EnemyManager(sf::RenderWindow* window, ExpManager* pExpManager)
 {
@@ -7,9 +9,9 @@ EnemyManager::EnemyManager(sf::RenderWindow* window, ExpManager* pExpManager)
 
 	
 	enemyPrefab.clear();
-	enemyPrefab.push_back(Enemy(20, {0,0}, 4, 100.0f, 80.0f, 1.0f, 10.0f, pExpManager)); // square enemy
-	enemyPrefab.push_back(Enemy(25, {0,0}, 6, 100.0f, 100.0f, 1.0f, 10.0f, pExpManager)); // hexagone enemy
-	enemyPrefab.push_back(Enemy(30, {0,0}, 8, 100.0f, 120.0f, 1.0f, 10.0f, pExpManager)); // hoctogone enemy
+	enemyPrefab.push_back(Enemy(20, {0,0}, 4, 100.0f, 80.0f, 1.0f, 10.0f, pExpManager, this)); // square enemy
+	enemyPrefab.push_back(Enemy(25, {0,0}, 6, 100.0f, 100.0f, 1.0f, 10.0f, pExpManager, this)); // hexagone enemy
+	enemyPrefab.push_back(Enemy(30, {0,0}, 8, 100.0f, 120.0f, 1.0f, 10.0f, pExpManager, this)); // hoctogone enemy
 
 	enemyList.clear();
 }
@@ -51,7 +53,8 @@ void EnemyManager::TrackPlayer(Player *pPlayer, float &deltaTime)
 		target = Normalize(target);
 
 		(*it).shape.setPosition(sf::Vector2f{ (*it).shape.getPosition().x + target.x * deltaTime * (*it).pEnemyStats.moveSpeed, (*it).shape.getPosition().y + target.y * deltaTime * (*it).pEnemyStats.moveSpeed });
-		if (IsOverlappingCircleOnCircle((*it).shape.getPosition(), (*it).shape.getRadius(), pPlayer->shape.getPosition(), pPlayer->shape.getRadius()))
+		it++;
+		/*if (IsOverlappingCircleOnCircle((*it).shape.getPosition(), (*it).shape.getRadius(), pPlayer->shape.getPosition(), pPlayer->shape.getRadius()))
 		{
 			(*it).EnemyDeath();
 			it = enemyList.erase(it);
@@ -59,7 +62,7 @@ void EnemyManager::TrackPlayer(Player *pPlayer, float &deltaTime)
 		else
 		{
 			it++;
-		}
+		}*/
 	}
 }
 
