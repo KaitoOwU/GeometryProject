@@ -13,7 +13,8 @@ class Particle
 {
 public:
 	Particle(sf::Vector2f position, float speed, float lifeDuration,
-		sf::Vector2f direction, PARTICLE_SYSTEM_TYPE psType, float timeBeforeStart);
+		sf::Vector2f direction, PARTICLE_SYSTEM_TYPE psType, 
+		float timeBeforeStart, sf::Color color = sf::Color::Transparent);
 	~Particle();
 	void UpdateParticle(float& deltaTime);
 	void DisplayParticle(sf::RenderWindow& window);
