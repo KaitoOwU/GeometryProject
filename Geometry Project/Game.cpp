@@ -149,20 +149,15 @@ void Game::UpgradePlayer(UPGRADES upgrade)
 	{
 	case SPEED:
 		std::cout << "Speed upgraded" << std::endl;
-		pPlayer->speedMultiplier *= 1.05f;
 		break;
 	case DAMAGE:
 		std::cout << "Damage upgraded" << std::endl;
-		pPlayer->damageMultiplier *= 1.05f;
 		break;
 	case HEALTH:
 		std::cout << "Health upgraded" << std::endl;
-		pPlayer->maxHealth += 25.f;
-		pPlayer->health += 25.f;
 		break;
 	case MUTATION:
 		std::cout << "Mutation" << std::endl;
-		pPlayer->MutateToNextState();
 		break;
 	default:
 		break;
