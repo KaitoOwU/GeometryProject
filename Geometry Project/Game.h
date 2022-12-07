@@ -41,6 +41,7 @@ public:
 	void Mutate();
 	void UpgradePlayer(UPGRADES upgrade);
 	void Death();
+	void OpenUpgradeMenu();
 	float* score;
 	float test = 1.f;
 	GAMESTATE* gameState;
