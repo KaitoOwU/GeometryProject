@@ -84,7 +84,7 @@ void Player::Shoot(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime) 
 			this->circleProjList.push_back(proj);
 			
 			for (int i = 0; i < numberOfBalls; i++) {
-				PlayerCircleProjectile* proj = new PlayerCircleProjectile(projectileDir, &deltaTime);
+				PlayerCircleProjectile* proj = new PlayerCircleProjectile(projectileDir, &deltaTime, pEnemyManager);
 				proj->shape.setFillColor(sf::Color::Magenta);
 				proj->shape.setRadius(10.f);
 				sf::Vector2f spawnPos;
