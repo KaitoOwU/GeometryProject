@@ -43,6 +43,7 @@ public:
 	void UpgradePlayer(UPGRADES upgrade);
 	void Death();
 	void OpenUpgradeMenu();
+	void ApplyGUIChanges();
 	void TakeDamage();
 	void UpdateAllParticleSystems(float& deltaTime);
 	void DisplayAllParticleSystems(sf::RenderWindow& window);
