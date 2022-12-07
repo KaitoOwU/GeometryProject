@@ -137,6 +137,8 @@
     <ClCompile Include="CharacterStats.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="Exp.cpp" />
+    <ClCompile Include="ExpManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Geometry Project.cpp" />
     <ClCompile Include="Health.cpp" />
@@ -144,7 +146,7 @@
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="Projectiles.cpp" />
     <ClCompile Include="UserInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -152,13 +154,15 @@
     <ClInclude Include="CharacterStats.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyManager.h" />
+    <ClInclude Include="Exp.h" />
+    <ClInclude Include="ExpManager.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Health.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Projectile.h" />
+    <ClInclude Include="Projectiles.h" />
     <ClInclude Include="UserInterface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

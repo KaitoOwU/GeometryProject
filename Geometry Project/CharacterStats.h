@@ -2,6 +2,7 @@
 class CharacterStats
 {
 public:
+	CharacterStats();
 	CharacterStats(float moveSpeed, float attackSpeed, float damage);
 	~CharacterStats();
 

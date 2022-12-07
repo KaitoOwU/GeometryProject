@@ -8,8 +8,10 @@ Game::Game(sf::RenderWindow* window)
 	renderWindow = window;
 	score = new float(0.f);
 	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, window);
-	pEnemyManager = new EnemyManager(window);
+	pExpManager = new ExpManager(window);
+	pEnemyManager = new EnemyManager(window, pExpManager);
 	pInputManager = new InputManager(this);
+	allParticlesSystems.clear();
 }
 
 Game::~Game()
@@ -34,9 +36,11 @@ void Game::Display(sf::RenderWindow& window)
 	}
 	case GAMESTATE::PLAYING:
 	{
+		pExpManager->DrawExperience();
 		pEnemyManager->DrawEnemy();
 		pPlayer->Display(window);
 		pPlayer->DisplayProjectile(window);
+		DisplayAllParticleSystems(window);
 		ui->DisplayGUI(window);
 		break;
 	}
@@ -69,10 +73,12 @@ void Game::Update(float& deltaTime)
 	{
 	case PLAYING: {
 		pEnemyManager->TrackPlayer(pPlayer, deltaTime);
+		pExpManager->ExpTrackPlayer(pPlayer, deltaTime);
 
 		pPlayer->Move(pInputManager->inputs, deltaTime);
 		pPlayer->shootCooldown -= deltaTime;
 		pPlayer->Shoot(pInputManager->inputs, deltaTime);
+		UpdateAllParticleSystems(deltaTime);
 		pPlayer->UpdateProjectile(deltaTime);
 	}
 	case MENUOPEN:
@@ -105,6 +111,7 @@ void Game::PauseGame()
 		return;
 	case PAUSE:
 		*gameState = PLAYING;
+		TakeDamage();
 		return;
 	default:
 		return;
@@ -117,8 +124,9 @@ void Game::ResetGame()
 	delete pEnemyManager;
 	*score = 0;
 	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, renderWindow);
-	pEnemyManager = new EnemyManager(renderWindow);
+	pEnemyManager = new EnemyManager(renderWindow, pExpManager);
 	*gameState = MENUOPEN;
+	allParticlesSystems.clear();
 }
 
 void Game::UpgadeSpeed()
@@ -149,15 +157,20 @@ void Game::UpgradePlayer(UPGRADES upgrade)
 	{
 	case SPEED:
 		std::cout << "Speed upgraded" << std::endl;
+		pPlayer->speedMultiplier *= 1.05f;
 		break;
 	case DAMAGE:
 		std::cout << "Damage upgraded" << std::endl;
+		pPlayer->damageMultiplier *= 1.05f;
 		break;
 	case HEALTH:
 		std::cout << "Health upgraded" << std::endl;
+		pPlayer->maxHealth += 25;
+		pPlayer->health += 25;
 		break;
 	case MUTATION:
 		std::cout << "Mutation" << std::endl;
+		pPlayer->MutateToNextState();
 		break;
 	default:
 		break;
@@ -168,4 +181,43 @@ void Game::Death()
 {
 	*gameState = DEATH;
 	ui->UpdateScore(score);
+}
+
+void Game::OpenUpgradeMenu()
+{
+	*gameState = GAMESTATE::UPGRADING;
+}
+
+void Game::TakeDamage()
+{
+	allParticlesSystems.push_back(ParticleSystem(PLAYER_DAMAGE, 
+		pPlayer->shape.getPosition() 
+		+ sf::Vector2f{pPlayer->shape.getRadius(), pPlayer->shape.getRadius()}));
+}
+
+void Game::UpdateAllParticleSystems(float& deltaTime)
+{
+	std::list<ParticleSystem>::iterator it = allParticlesSystems.begin();
+	while (it != allParticlesSystems.end())
+	{
+		if (it->IsAllParticlesEmpty())
+		{
+			it = allParticlesSystems.erase(it);
+		}
+		else
+		{
+			it->UpdateParticleSystem(deltaTime);
+			it++;
+		}
+	}
+}
+
+void Game::DisplayAllParticleSystems(sf::RenderWindow& window)
+{
+	std::list<ParticleSystem>::iterator it = allParticlesSystems.begin();
+	while (it != allParticlesSystems.end())
+	{
+		it->DisplayParticleSystem(window); 
+		it++;
+	}
 }
