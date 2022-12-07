@@ -56,38 +56,90 @@ void Player::Move(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime)
 
 void Player::Shoot(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime) {
 	if (shootCooldown <= 0 && inputs[sf::Keyboard::Key::Space]) {
-		shootCooldown = 1.f;
-		sf::Vector2i mousePos = {sf::Mouse::getPosition().x, sf::Mouse::getPosition().y};
-		sf::Vector2f projectileDir = Normalize({ mousePos.x - shape.getPosition().x, mousePos.y - shape.getPosition().y });
+		switch (projectileType) {
+		case Circle: {
+			shootCooldown = 1.f;
+			sf::Vector2f target = (sf::Vector2f) sf::Mouse::getPosition(*activeWindow);
+			sf::Vector2f playerPos = shape.getPosition();
+			target = target - playerPos;
+			sf::Vector2f projectileDir = Normalize(target);
 
-		Projectile* proj = new Projectile(projectileDir, &deltaTime);
-		proj->shape.setFillColor(sf::Color::Magenta);
-		proj->shape.setRadius(10.0f);
-		proj->shape.setPosition(shape.getPosition());
-		this->projectileList.push_back(proj);
+			PlayerCircleProjectile* proj = new PlayerCircleProjectile(projectileDir, &deltaTime);
+			proj->shape.setFillColor(sf::Color::Magenta);
+			proj->shape.setRadius(10.f);
+			proj->shape.setPosition(shape.getPosition());
+			this->circleProjList.push_back(proj);
+			break;
+		}
+		case Triangle: {
+			if (triangleProjList.size() >= 5) {
+				return;
+			}
+
+			shootCooldown = 3.f;
+
+			PlayerTriangleProjectile* proj = new PlayerTriangleProjectile(&deltaTime);
+			proj->shape.setFillColor(sf::Color::Magenta);
+			proj->shape.setPosition(shape.getPosition());
+			proj->shape.setPointCount(3);
+			proj->shape.setRadius(15.f);
+
+			triangleProjList.push_back(proj);
+			std::cout << triangleProjList.size();
+		}
+		}
 	}
 }
 
+void Player::SetProjectileMode(ActiveProjectileType type)
+{
+	this->projectileType = type;
+	circleProjList.clear();
+}
+
 void Player::UpdateProjectile(float& deltaTime) {
-	auto it = projectileList.begin();
-	while (it != projectileList.end()) {
-		(*it)->shape.move(((*it)->direction) / 4.f);
-		(*it)->lifeDuration -= deltaTime;
-		if ((*it)->lifeDuration <= 0) {
-			it = projectileList.erase(it);
-			continue;
+	switch (projectileType) {
+	case Circle: {
+		auto it = circleProjList.begin();
+		while (it != circleProjList.end()) {
+			(*it)->shape.move(((*it)->direction) / 4.f);
+			(*it)->lifeDuration -= deltaTime;
+			if ((*it)->lifeDuration <= 0) {
+				it = circleProjList.erase(it);
+				continue;
+			}
+			it++;
 		}
-		it++;
+		return;
 	}
-	return;
+	case Triangle: {
+		auto it = triangleProjList.begin();
+		while (it != triangleProjList.end()) {
+			sf::Vector2f target = (sf::Vector2f) sf::Mouse::getPosition(*activeWindow);
+			sf::Vector2f trianglePos = (*it)->shape.getPosition();
+			target = target - trianglePos;
+			sf::Vector2f projectileDir = Normalize(target);
+			
+			(*it)->shape.move(projectileDir / 10.f);
+			it++;
+		}
+		return;
+	}
+	}
 }
 
 void Player::DisplayProjectile(sf::RenderWindow& window)
 {
-	auto it = projectileList.begin();
-	while (it != projectileList.end()) {
+	auto it = circleProjList.begin();
+	while (it != circleProjList.end()) {
 		window.draw((*it)->shape);
 		it++;
+	}
+
+	auto it2 = triangleProjList.begin();
+	while (it2 != triangleProjList.end()) {
+		window.draw((*it2)->shape);
+		it2++;
 	}
 }
 
