@@ -1,6 +1,6 @@
 #include "Enemy.h"
 
-Enemy::Enemy(float size = 0, sf::Vector2f spawnPoint = {0,0}, int numberOfSides = 4, float maxHealth = 100.0f, float moveSpeed = 1.0f, float attackSpeed = 1.0f, float damage = 10.0f)
+Enemy::Enemy(float size = 0, sf::Vector2f spawnPoint = {0,0}, int numberOfSides = 4, float maxHealth = 100.f, float moveSpeed = 100.f, float attackSpeed = 1.f, float damage = 1.f, ExpManager* pExpManager = nullptr)
 {
 	sf::CircleShape shape(0.f, numberOfSides);
 	this->shape = shape;
@@ -8,11 +8,17 @@ Enemy::Enemy(float size = 0, sf::Vector2f spawnPoint = {0,0}, int numberOfSides 
 	this->shape.setOrigin(sf::Vector2f({ this->shape.getRadius() / 2.f, this->shape.getRadius() / 2.f }));
 	this->shape.setPosition(spawnPoint);
 	this->shape.setRadius(size);
+	this->pExpManager = pExpManager;
 
 	
 
 	this->pEnemyHealth = Health(maxHealth);
 	this->pEnemyStats = CharacterStats(moveSpeed, attackSpeed, damage);
+}
+
+void Enemy::EnemyDeath()
+{
+	pExpManager->experienceOrbList.push_back(Exp(shape.getPosition(), 10));
 }
 
 Enemy::~Enemy()

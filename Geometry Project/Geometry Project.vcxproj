@@ -137,6 +137,8 @@
     <ClCompile Include="CharacterStats.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="Exp.cpp" />
+    <ClCompile Include="ExpManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Geometry Project.cpp" />
     <ClCompile Include="Health.cpp" />
@@ -152,6 +154,8 @@
     <ClInclude Include="CharacterStats.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyManager.h" />
+    <ClInclude Include="Exp.h" />
+    <ClInclude Include="ExpManager.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Health.h" />
     <ClInclude Include="InputManager.h" />
