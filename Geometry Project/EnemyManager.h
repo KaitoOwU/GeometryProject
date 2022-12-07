@@ -2,8 +2,11 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Enemy.h"
-#include "Player.h"
 #include "AllData.h"
+
+class Player;
+class ExpManager;
+class Enemy;
 
 class EnemyManager
 {
