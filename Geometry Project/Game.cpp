@@ -4,13 +4,13 @@ Game::Game(sf::RenderWindow* window)
 {
 	gameState = new GAMESTATE;
 	(*gameState) = GAMESTATE::MENUOPEN;
-	ui = new UserInterface(this);
 	renderWindow = window;
 	score = new float(0.f);
 	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, window);
 	pExpManager = new ExpManager(window);
 	pEnemyManager = new EnemyManager(window, pExpManager);
 	pInputManager = new InputManager(this);
+	ui = new UserInterface(this);
 	allParticlesSystems.clear();
 }
 
@@ -36,6 +36,7 @@ void Game::Display(sf::RenderWindow& window)
 	}
 	case GAMESTATE::PLAYING:
 	{
+		//ORDER IN LAYER depending of the order of these functions
 		pExpManager->DrawExperience();
 		pEnemyManager->DrawEnemy();
 		pPlayer->Display(window);
@@ -93,8 +94,7 @@ void Game::Update(float& deltaTime)
 void Game::LaunchGame()
 {
 	*gameState = GAMESTATE::PLAYING;
-	//ui->UpdateGUI(pPlayer->health, pPlayer->maxHealth, 
-	//pPlayer->currentXP, pPlayer->xpforNextLevel, pPlayer->currentLevel, score);
+	ApplyGUIChanges();
 }
 
 void Game::CloseGame()
@@ -111,6 +111,7 @@ void Game::PauseGame()
 		return;
 	case PAUSE:
 		*gameState = PLAYING;
+		ApplyGUIChanges();
 		TakeDamage();
 		return;
 	default:
@@ -175,6 +176,7 @@ void Game::UpgradePlayer(UPGRADES upgrade)
 	default:
 		break;
 	}
+	ApplyGUIChanges();
 }
 
 void Game::Death()
@@ -186,12 +188,22 @@ void Game::Death()
 void Game::OpenUpgradeMenu()
 {
 	*gameState = GAMESTATE::UPGRADING;
+	ui->UpdateUpgradeMenu();
+}
+
+void Game::ApplyGUIChanges()
+{
+	ui->UpdateGUI(pPlayer->health, pPlayer->maxHealth, pPlayer->currentXP,
+		pPlayer->xpRequired[pPlayer->currentLvl], pPlayer->currentLvl, score);
+	if (true)
+	{
+		
+	}
 }
 
 void Game::TakeDamage()
 {
-	allParticlesSystems.push_back(ParticleSystem(PLAYER_DAMAGE, 
-		pPlayer->shape.getPosition() 
+	allParticlesSystems.push_back(ParticleSystem(PLAYER_DAMAGE, pPlayer->shape.getPosition() 
 		+ sf::Vector2f{pPlayer->shape.getRadius(), pPlayer->shape.getRadius()}));
 }
 
