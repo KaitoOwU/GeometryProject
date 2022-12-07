@@ -11,6 +11,7 @@ Game::Game(sf::RenderWindow* window)
 	pExpManager = new ExpManager(window);
 	pEnemyManager = new EnemyManager(window, pExpManager);
 	pInputManager = new InputManager(this);
+	allParticlesSystems.clear();
 }
 
 Game::~Game()
@@ -39,6 +40,7 @@ void Game::Display(sf::RenderWindow& window)
 		pEnemyManager->DrawEnemy();
 		pPlayer->Display(window);
 		pPlayer->DisplayProjectile(window);
+		DisplayAllParticleSystems(window);
 		ui->DisplayGUI(window);
 		break;
 	}
@@ -76,6 +78,7 @@ void Game::Update(float& deltaTime)
 		pPlayer->Move(pInputManager->inputs, deltaTime);
 		pPlayer->shootCooldown -= deltaTime;
 		pPlayer->Shoot(pInputManager->inputs, deltaTime);
+		UpdateAllParticleSystems(deltaTime);
 		pPlayer->UpdateProjectile(deltaTime);
 	}
 	case MENUOPEN:
@@ -108,6 +111,7 @@ void Game::PauseGame()
 		return;
 	case PAUSE:
 		*gameState = PLAYING;
+		TakeDamage();
 		return;
 	default:
 		return;
@@ -122,6 +126,7 @@ void Game::ResetGame()
 	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, renderWindow);
 	pEnemyManager = new EnemyManager(renderWindow, pExpManager);
 	*gameState = MENUOPEN;
+	allParticlesSystems.clear();
 }
 
 void Game::UpgadeSpeed()
@@ -181,4 +186,38 @@ void Game::Death()
 void Game::OpenUpgradeMenu()
 {
 	*gameState = GAMESTATE::UPGRADING;
+}
+
+void Game::TakeDamage()
+{
+	allParticlesSystems.push_back(ParticleSystem(PLAYER_DAMAGE, 
+		pPlayer->shape.getPosition() 
+		+ sf::Vector2f{pPlayer->shape.getRadius(), pPlayer->shape.getRadius()}));
+}
+
+void Game::UpdateAllParticleSystems(float& deltaTime)
+{
+	std::list<ParticleSystem>::iterator it = allParticlesSystems.begin();
+	while (it != allParticlesSystems.end())
+	{
+		if (it->IsAllParticlesEmpty())
+		{
+			it = allParticlesSystems.erase(it);
+		}
+		else
+		{
+			it->UpdateParticleSystem(deltaTime);
+			it++;
+		}
+	}
+}
+
+void Game::DisplayAllParticleSystems(sf::RenderWindow& window)
+{
+	std::list<ParticleSystem>::iterator it = allParticlesSystems.begin();
+	while (it != allParticlesSystems.end())
+	{
+		it->DisplayParticleSystem(window); 
+		it++;
+	}
 }
