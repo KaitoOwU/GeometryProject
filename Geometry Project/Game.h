@@ -47,6 +47,7 @@ public:
 	Player* pPlayer;
 	EnemyManager* pEnemyManager;
 	InputManager* pInputManager;
+	ExpManager* pExpManager;
 	sf::RenderWindow* renderWindow;
 
 private:

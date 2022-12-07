@@ -1,6 +1,8 @@
 #include "CharacterStats.h"
 
-
+CharacterStats::CharacterStats()
+{
+}
 CharacterStats::CharacterStats(float moveSpeed, float attackSpeed, float damage)
 {
 	this->moveSpeed = moveSpeed;

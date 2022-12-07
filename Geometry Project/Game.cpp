@@ -8,7 +8,8 @@ Game::Game(sf::RenderWindow* window)
 	renderWindow = window;
 	score = new float(0.f);
 	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, window);
-	pEnemyManager = new EnemyManager(window);
+	pExpManager = new ExpManager(window);
+	pEnemyManager = new EnemyManager(window, pExpManager);
 	pInputManager = new InputManager(this);
 }
 
@@ -34,6 +35,7 @@ void Game::Display(sf::RenderWindow& window)
 	}
 	case GAMESTATE::PLAYING:
 	{
+		pExpManager->DrawExperience();
 		pEnemyManager->DrawEnemy();
 		pPlayer->Display(window);
 		pPlayer->DisplayProjectile(window);
@@ -69,6 +71,7 @@ void Game::Update(float& deltaTime)
 	{
 	case PLAYING: {
 		pEnemyManager->TrackPlayer(pPlayer, deltaTime);
+		pExpManager->ExpTrackPlayer(pPlayer, deltaTime);
 
 		pPlayer->Move(pInputManager->inputs, deltaTime);
 		pPlayer->shootCooldown -= deltaTime;
@@ -117,7 +120,7 @@ void Game::ResetGame()
 	delete pEnemyManager;
 	*score = 0;
 	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, renderWindow);
-	pEnemyManager = new EnemyManager(renderWindow);
+	pEnemyManager = new EnemyManager(renderWindow, pExpManager);
 	*gameState = MENUOPEN;
 }
 
