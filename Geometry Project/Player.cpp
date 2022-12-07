@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Game.h";
 #include <iostream>
 #include <cmath>
 
@@ -20,6 +21,17 @@ Player::~Player()
 {
 }
 
+void Player::ComputeIfNextLevel()
+{
+	if (xpRequired.find(currentLvl + 1) == xpRequired.end())
+		return;
+
+	if (currentXP >= xpRequired[currentLvl + 1]) {
+		currentLvl++;
+		currentXP -= xpRequired[currentLvl];
+	}
+}
+
 void Player::Move(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime)
 {
 	if (!this->canMove)
@@ -33,16 +45,16 @@ void Player::Move(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime)
 		if (it->second) {
 			switch ((Player::MovementDirection) it->first) {
 			case Player::Up:
-				py -= (this->movementSpeed *deltaTime);
+				py -= (this->movementSpeed * deltaTime * speedMultiplier);
 				break;
 			case Player::Down:
-				py += (this->movementSpeed * deltaTime);
+				py += (this->movementSpeed * deltaTime * speedMultiplier);
 				break;
 			case Player::Right:
-				px += (this->movementSpeed * deltaTime);
+				px += (this->movementSpeed * deltaTime * speedMultiplier);
 				break;
 			case Player::Left:
-				px -= (this->movementSpeed * deltaTime);
+				px -= (this->movementSpeed * deltaTime * speedMultiplier);
 				break;
 			}
 		}
@@ -70,6 +82,21 @@ void Player::Shoot(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime) 
 			proj->shape.setRadius(10.f);
 			proj->shape.setPosition(shape.getPosition());
 			this->circleProjList.push_back(proj);
+			
+			for (int i = 0; i < numberOfBalls; i++) {
+				PlayerCircleProjectile* proj = new PlayerCircleProjectile(projectileDir, &deltaTime);
+				proj->shape.setFillColor(sf::Color::Magenta);
+				proj->shape.setRadius(10.f);
+				sf::Vector2f spawnPos;
+				if (abs(target.x) > abs(target.y)) {
+					spawnPos = { shape.getPosition().x, shape.getPosition().y + 25 * i };
+				}
+				else {
+					spawnPos = { shape.getPosition().x + 25 * i , shape.getPosition().y };
+				}
+				proj->shape.setPosition(spawnPos);
+				this->circleProjList.push_back(proj);
+			}
 			break;
 		}
 		case Triangle: {
@@ -90,6 +117,33 @@ void Player::Shoot(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime) 
 		}
 		}
 	}
+}
+
+void Player::MutateToNextState()
+{
+	float currentMutationInt = (float)currentMutation + 1;
+	currentMutation = (Mutation)Clamp(currentMutationInt, 0, 4);
+
+	switch (currentMutation) {
+	case MonoShot: {
+		numberOfBalls = 1;
+		break;
+	}
+	case DoubleShot: {
+		numberOfBalls = 2;
+		break;
+	}
+	case QuadraShot: {
+		numberOfBalls = 4;
+		break;
+	}
+	case TriangleMaster: {
+		projectileType = ActiveProjectileType::Triangle;
+		numberOfBalls = 1;
+		break;
+	}
+	}
+
 }
 
 void Player::SetProjectileMode(ActiveProjectileType type)
