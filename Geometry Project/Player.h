@@ -79,6 +79,8 @@ public:
 	Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window);
 	~Player();
 
+	void ComputeIfNextLevel();
+
 	void Move(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime);
 	void Shoot(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime);
 	void MutateToNextState();

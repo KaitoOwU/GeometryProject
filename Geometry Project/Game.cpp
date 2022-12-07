@@ -174,3 +174,8 @@ void Game::Death()
 	*gameState = DEATH;
 	ui->UpdateScore(score);
 }
+
+void Game::OpenUpgradeMenu()
+{
+	*gameState = GAMESTATE::UPGRADING;
+}

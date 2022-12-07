@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Game.h";
 #include <iostream>
 #include <cmath>
 
@@ -17,6 +18,17 @@ Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf
 
 Player::~Player()
 {
+}
+
+void Player::ComputeIfNextLevel()
+{
+	if (xpRequired.find(currentLvl + 1) == xpRequired.end())
+		return;
+
+	if (currentXP >= xpRequired[currentLvl + 1]) {
+		currentLvl++;
+		currentXP -= xpRequired[currentLvl];
+	}
 }
 
 void Player::Move(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime)
