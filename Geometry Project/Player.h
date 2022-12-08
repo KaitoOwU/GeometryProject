@@ -2,13 +2,10 @@
 #include <SFML/Graphics.hpp>
 #include "AllData.h"
 #include "Projectiles.h"
-#include "EnemyManager.h"
 #include <map>
 #include <list>
 
 class EnemyManager;
-class PlayerCircleProjectile;
-class PlayerTriangleProjectile;
 
 class Player
 {
@@ -41,6 +38,7 @@ public:
 	std::list<PlayerCircleProjectile*> circleProjList;
 	std::list<PlayerTriangleProjectile*> triangleProjList;
 	ActiveProjectileType projectileType = ActiveProjectileType::Circle;
+
 	EnemyManager* pEnemyManager = nullptr;
 
 	float maxHealth = 100.f;
@@ -98,6 +96,8 @@ public:
 	void DisplayProjectile(sf::RenderWindow& window);
 
 	void DetectProjectilCollision();
+
 private:
 	int numberOfBalls = 1;
+	bool canCheck = true;
 };

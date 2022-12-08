@@ -2,6 +2,7 @@
 #include "Game.h";
 #include <iostream>
 #include <cmath>
+#include "EnemyManager.h"
 
 Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window, EnemyManager* pEnemyManager)
 {
@@ -77,14 +78,14 @@ void Player::Shoot(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime) 
 			target = target - playerPos;
 			sf::Vector2f projectileDir = Normalize(target);
 
-			PlayerCircleProjectile* proj = new PlayerCircleProjectile(projectileDir, &deltaTime, pEnemyManager);
+			PlayerCircleProjectile* proj = new PlayerCircleProjectile(projectileDir, &deltaTime);
 			proj->shape.setFillColor(sf::Color::Magenta);
 			proj->shape.setRadius(10.f);
 			proj->shape.setPosition(shape.getPosition());
 			this->circleProjList.push_back(proj);
 			
 			for (int i = 0; i < numberOfBalls; i++) {
-				PlayerCircleProjectile* proj = new PlayerCircleProjectile(projectileDir, &deltaTime, pEnemyManager);
+				PlayerCircleProjectile* proj = new PlayerCircleProjectile(projectileDir, &deltaTime);
 				proj->shape.setFillColor(sf::Color::Magenta);
 				proj->shape.setRadius(10.f);
 				sf::Vector2f spawnPos;
@@ -106,7 +107,7 @@ void Player::Shoot(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime) 
 
 			shootCooldown = 3.f;
 
-			PlayerTriangleProjectile* proj = new PlayerTriangleProjectile(&deltaTime, pEnemyManager);
+			PlayerTriangleProjectile* proj = new PlayerTriangleProjectile(&deltaTime);
 			proj->shape.setFillColor(sf::Color::Magenta);
 			proj->shape.setPosition(shape.getPosition());
 			proj->shape.setPointCount(3);
@@ -205,28 +206,31 @@ void Player::Display(sf::RenderWindow& window)
 
 void Player::DetectProjectilCollision()
 {
-	if (circleProjList.size() <= 0 || pEnemyManager->enemyList.size() <= 0)
+	if (circleProjList.size() <= 0 || pEnemyManager->enemyList.size() <= 0 && canCheck)
 		return;
 
+	canCheck = false;
 
 	std::list<PlayerCircleProjectile*>::iterator it = circleProjList.begin();
 	while (it != circleProjList.end())
 	{
-		std::list<Enemy>::iterator eit = pEnemyManager->enemyList.begin();
-		while (eit != pEnemyManager->enemyList.end())
+		std::list<Enemy>::iterator it2 = pEnemyManager->enemyList.begin();
+		while (it2 != pEnemyManager->enemyList.end())
 		{
-			if (IsOverlappingCircleOnCircle((*it)->shape.getPosition(), (*it)->shape.getRadius(), (*eit).shape.getPosition(), (*eit).shape.getRadius()))
+			if (IsOverlappingCircleOnCircle((*it)->shape.getPosition(), (*it)->shape.getRadius(), (*it2).shape.getPosition(), (*it2).shape.getRadius()))
 			{
-				//it = circleProjList.erase(it);
-				(*eit).pEnemyHealth.TakeDamage(1);
-				std::cout << "oui oui baguette" << std::endl;
-				break;
+				it = circleProjList.erase(it);
+				(*it2).pEnemyHealth.TakeDamage(100);
+				it2++;
+				canCheck = true;
+				return;
 			}
 			else
 			{
-				eit++;
+				it2++;
 			}
 		}
 		it++;
 	}
+	canCheck = true;
 }
