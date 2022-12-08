@@ -73,7 +73,7 @@ void Game::Update(float& deltaTime)
 	switch (*gameState)
 	{
 	case PLAYING: {
-		pEnemyManager->TrackPlayer(pPlayer, deltaTime);
+		pEnemyManager->EnemyManagerUpdate(pPlayer, deltaTime);
 		pExpManager->ExpTrackPlayer(pPlayer, deltaTime);
 
 		pPlayer->Move(pInputManager->inputs, deltaTime);
@@ -95,6 +95,7 @@ void Game::LaunchGame()
 {
 	*gameState = GAMESTATE::PLAYING;
 	ApplyGUIChanges();
+	srand(time(NULL));
 }
 
 void Game::CloseGame()
@@ -127,6 +128,7 @@ void Game::ResetGame()
 	pEnemyManager = new EnemyManager(renderWindow, pExpManager);
 	*gameState = MENUOPEN;
 	allParticlesSystems.clear();
+	srand(time(NULL));
 }
 
 void Game::UpgadeSpeed()

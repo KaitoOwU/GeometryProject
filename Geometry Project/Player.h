@@ -5,6 +5,8 @@
 #include <map>
 #include <list>
 
+class EnemyManager;
+
 class Player
 {
 public:
@@ -36,6 +38,9 @@ public:
 	std::list<PlayerCircleProjectile*> circleProjList;
 	std::list<PlayerTriangleProjectile*> triangleProjList;
 	ActiveProjectileType projectileType = ActiveProjectileType::Circle;
+
+	EnemyManager* pEnemyManager = nullptr;
+
 
 	float maxHealth = 100.f;
 	float health = maxHealth;
@@ -90,6 +95,8 @@ public:
 
 	void UpdateProjectile(float& deltaTime);
 	void DisplayProjectile(sf::RenderWindow& window);
+
+	void DetectProjectilCollision();
 
 private:
 	int numberOfBalls = 1;
