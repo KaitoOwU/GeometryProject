@@ -47,6 +47,7 @@ public:
 	void TakeDamage();
 	void UpdateAllParticleSystems(float& deltaTime);
 	void DisplayAllParticleSystems(sf::RenderWindow& window);
+	void IsPlayerDead();
 	float* score;
 	float test = 1.f;
 	GAMESTATE* gameState;

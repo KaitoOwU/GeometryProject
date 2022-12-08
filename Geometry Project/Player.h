@@ -81,7 +81,7 @@ public:
 
 	bool canMove = true;
 
-	Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window);
+	Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window, EnemyManager* pEnemyManager);
 	~Player();
 
 	void ComputeIfNextLevel();

@@ -7,9 +7,9 @@ EnemyManager::EnemyManager(sf::RenderWindow* window, ExpManager* pExpManager)
 
 	
 	enemyPrefab.clear();
-	enemyPrefab.push_back(Enemy(20, {0,0}, 4, 10.0f, 80.0f, 1.0f, 10.0f, pExpManager)); // square enemy
-	enemyPrefab.push_back(Enemy(25, {0,0}, 6, 15.0f, 100.0f, 1.0f, 10.0f, pExpManager)); // hexagone enemy
-	enemyPrefab.push_back(Enemy(30, {0,0}, 8, 20.0f, 120.0f, 1.0f, 10.0f, pExpManager)); // hoctogone enemy
+	enemyPrefab.push_back(Enemy(20, {0,0}, 4, 10.0f, 80.0f, 1.0f, 10.0f,300, pExpManager)); // square enemy
+	enemyPrefab.push_back(Enemy(25, {0,0}, 6, 15.0f, 100.0f, 1.0f, 10.0f,200, pExpManager)); // hexagone enemy
+	enemyPrefab.push_back(Enemy(30, {0,0}, 8, 20.0f, 120.0f, 1.0f, 10.0f,100, pExpManager)); // hoctogone enemy
 
 
 	enemyList.clear();
@@ -64,7 +64,7 @@ void EnemyManager::WaveManager(float &deltaTime)
 	{
 		currentWaveTime = maxTime;
 		float value = initEnemyWave * enemyMultiplicator;
-
+		initEnemyWave = (int)value;
 		value = Clamp(value, 0, maxEnemyPerWave);
 		SpawnEnemy((int)value);
 	}
@@ -77,7 +77,7 @@ void EnemyManager::EnemyManagerUpdate(Player *pPlayer, float &deltaTime)
 {
 	WaveManager(deltaTime);
 
-	if (this->enemyList.size() <= 0) {
+	if (enemyList.size() <= 0) {
 		return;
 	}
 
@@ -88,11 +88,17 @@ void EnemyManager::EnemyManagerUpdate(Player *pPlayer, float &deltaTime)
 		target = Normalize(target);
 
 		(*it).enemyDamageCoolDown -= deltaTime;
+		(*it).pEnemyStats.attackSpeed -= deltaTime;
+		//(*it).shape.setRotation(it->shape.getRotation() + deltaTime * 20);
 
 		(*it).shape.setPosition(sf::Vector2f{ (*it).shape.getPosition().x + target.x * deltaTime * (*it).pEnemyStats.moveSpeed, (*it).shape.getPosition().y + target.y * deltaTime * (*it).pEnemyStats.moveSpeed });
 		if (IsOverlappingCircleOnCircle((*it).shape.getPosition(), (*it).shape.getRadius(), pPlayer->shape.getPosition(), pPlayer->shape.getRadius()))
 		{
-			//blabla
+			if ((*it).pEnemyStats.attackSpeed <= 0)
+			{
+				(*it).pEnemyStats.attackSpeed = it->consAttackSpeed;
+				pPlayer->health -= it->pEnemyStats.damage;
+			}
 			it++;
 		}
 		else if ((*it).pEnemyHealth.currentLife <= 0)

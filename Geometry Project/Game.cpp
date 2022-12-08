@@ -6,9 +6,9 @@ Game::Game(sf::RenderWindow* window)
 	(*gameState) = GAMESTATE::MENUOPEN;
 	renderWindow = window;
 	score = new float(0.f);
-	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, window);
 	pExpManager = new ExpManager(window);
 	pEnemyManager = new EnemyManager(window, pExpManager);
+	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, window, pEnemyManager);
 	pInputManager = new InputManager(this);
 	ui = new UserInterface(this);
 	allParticlesSystems.clear();
@@ -39,10 +39,15 @@ void Game::Display(sf::RenderWindow& window)
 		//ORDER IN LAYER depending of the order of these functions
 		pExpManager->DrawExperience();
 		pEnemyManager->DrawEnemy();
+
 		pPlayer->Display(window);
 		pPlayer->DisplayProjectile(window);
+		pPlayer->DetectProjectilCollision();
+		IsPlayerDead();
+
 		DisplayAllParticleSystems(window);
 		ui->DisplayGUI(window);
+
 		break;
 	}
 	case GAMESTATE::UPGRADING:
@@ -125,7 +130,7 @@ void Game::ResetGame()
 	delete pPlayer;
 	delete pEnemyManager;
 	*score = 0;
-	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, renderWindow);
+	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, renderWindow, pEnemyManager);
 	pEnemyManager = new EnemyManager(renderWindow, pExpManager);
 	*gameState = MENUOPEN;
 	allParticlesSystems.clear();
@@ -234,4 +239,14 @@ void Game::DisplayAllParticleSystems(sf::RenderWindow& window)
 		it->DisplayParticleSystem(window); 
 		it++;
 	}
+}
+
+void Game::IsPlayerDead()
+{
+	if (pPlayer->health <= 0)
+	{
+		std::cout << "qksjdkjqs" << std::endl;
+		Death();
+	}
+	return;
 }
