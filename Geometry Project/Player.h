@@ -99,5 +99,4 @@ public:
 
 private:
 	int numberOfBalls = 1;
-	bool canCheck = true;
 };

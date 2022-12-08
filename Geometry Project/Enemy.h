@@ -19,6 +19,8 @@ public:
 	CharacterStats pEnemyStats;
 	ExpManager* pExpManager = nullptr;
 	sf::CircleShape shape;
+
+	float enemyDamageCoolDown = 0.5f;
 private:
 
 };
