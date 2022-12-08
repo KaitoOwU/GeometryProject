@@ -180,8 +180,8 @@ void Game::UpgradePlayer(UPGRADES upgrade)
 	default:
 		break;
 	}
-	allParticlesSystems.push_back(ParticleSystem(UPGRADE, pPlayer->shape.getPosition()
-		+ sf::Vector2f{ pPlayer->shape.getRadius(), pPlayer->shape.getRadius() },
+	allParticlesSystems.push_back(ParticleSystem(UPGRADE,
+		pPlayer->shape.getPosition() + sf::Vector2f{ 0.f,pPlayer->shape.getRadius() * 2 },
 		sf::Vector2f{ 0.f, -1.f }, color));
 	ApplyGUIChanges();
 }
@@ -202,13 +202,15 @@ void Game::ApplyGUIChanges()
 {
 	ui->UpdateGUI(pPlayer->health, pPlayer->maxHealth, pPlayer->currentXP,
 		pPlayer->xpRequired[pPlayer->currentLvl], pPlayer->currentLvl, score);
-	if (true)
-	{
-		
-	}
 }
 
-void Game::TakeDamage()
+void Game::EnemyTakingDamage(sf::Vector2f enemyPosition)
+{
+	allParticlesSystems.push_back(ParticleSystem(ENEMY_DAMAGE, enemyPosition,
+		sf::Vector2f{ 0.f, -1.f }));
+}
+
+void Game::HeroTakingDamage()
 {
 	allParticlesSystems.push_back(ParticleSystem(PLAYER_DAMAGE, pPlayer->shape.getPosition() 
 		+ sf::Vector2f{pPlayer->shape.getRadius(), pPlayer->shape.getRadius()}));
