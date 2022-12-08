@@ -4,7 +4,7 @@
 #include <cmath>
 #include "EnemyManager.h"
 
-Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window)
+Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window, EnemyManager* pEnemyManager)
 {
 	sf::CircleShape shape;
 	shape.setRadius(size);
@@ -15,6 +15,7 @@ Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf
 	this->shape = shape;
 	this->movementSpeed = movementSpeed;
 	this->activeWindow = window;
+	this->pEnemyManager = pEnemyManager;
 }
 
 Player::~Player()
@@ -219,6 +220,7 @@ void Player::DetectProjectilCollision()
 			{
 				if ((*it2).enemyDamageCoolDown <= 0)
 				{
+					it = circleProjList.erase(it);
 					(*it2).enemyDamageCoolDown = 0.5f;
 					(*it2).pEnemyHealth.TakeDamage(baseDamage * damageMultiplier);
 				}
