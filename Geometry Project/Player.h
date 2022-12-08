@@ -41,6 +41,7 @@ public:
 
 	EnemyManager* pEnemyManager = nullptr;
 
+
 	float maxHealth = 100.f;
 	float health = maxHealth;
 	float baseDamage = 3.f;
@@ -80,7 +81,7 @@ public:
 
 	bool canMove = true;
 
-	Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window, EnemyManager* pEnemyManager);
+	Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window);
 	~Player();
 
 	void ComputeIfNextLevel();

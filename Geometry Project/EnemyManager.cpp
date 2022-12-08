@@ -11,6 +11,7 @@ EnemyManager::EnemyManager(sf::RenderWindow* window, ExpManager* pExpManager)
 	enemyPrefab.push_back(Enemy(25, {0,0}, 6, 15.0f, 100.0f, 1.0f, 10.0f, pExpManager)); // hexagone enemy
 	enemyPrefab.push_back(Enemy(30, {0,0}, 8, 20.0f, 120.0f, 1.0f, 10.0f, pExpManager)); // hoctogone enemy
 
+
 	enemyList.clear();
 }
 

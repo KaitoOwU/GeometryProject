@@ -4,7 +4,7 @@
 #include <cmath>
 #include "EnemyManager.h"
 
-Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window, EnemyManager* pEnemyManager)
+Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window)
 {
 	sf::CircleShape shape;
 	shape.setRadius(size);
@@ -15,7 +15,6 @@ Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf
 	this->shape = shape;
 	this->movementSpeed = movementSpeed;
 	this->activeWindow = window;
-	this->pEnemyManager = pEnemyManager;
 }
 
 Player::~Player()
