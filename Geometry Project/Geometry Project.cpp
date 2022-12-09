@@ -6,7 +6,7 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y), "Xenophobia", sf::Style::None);
+    sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y), "Geimerophobia", sf::Style::None);
     Game* game = new Game(&window);
     sf::Mouse mouse = sf::Mouse();
     sf::Clock clock;
