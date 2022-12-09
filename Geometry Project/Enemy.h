@@ -19,10 +19,14 @@ public:
 	CharacterStats pEnemyStats;
 	ExpManager* pExpManager = nullptr;
 	sf::CircleShape shape;
+	sf::Color initColor = sf::Color::White;
 
 	float enemyDamageCoolDown = 0.5f;
 	float spinSpeed = 0.f;
 	float consAttackSpeed = 0.f;
+
+	float damageHit = 0.15f;
+	float contDamageHit = 0.15f;
 private:
 
 };

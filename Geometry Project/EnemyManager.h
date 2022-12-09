@@ -32,6 +32,7 @@ public:
 	void SpawnEnemy(int amount);
 	void DrawEnemy();
 	void WaveManager(float& deltaTime);
+	void DamageClipingManager(float& deltaTime);
 
 private:
 

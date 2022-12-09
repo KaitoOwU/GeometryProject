@@ -99,8 +99,8 @@ void Game::Update(float& deltaTime)
 void Game::LaunchGame()
 {
 	*gameState = GAMESTATE::PLAYING;
-	ApplyGUIChanges();
-	srand(time(NULL));
+	//ui->UpdateGUI(pPlayer->health, pPlayer->maxHealth, 
+	//pPlayer->currentXP, pPlayer->xpforNextLevel, pPlayer->currentLevel, score);
 }
 
 void Game::CloseGame()
@@ -129,8 +129,8 @@ void Game::ResetGame()
 	delete pPlayer;
 	delete pEnemyManager;
 	*score = 0;
-	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, renderWindow, pEnemyManager);
 	pEnemyManager = new EnemyManager(renderWindow, pExpManager);
+	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, renderWindow, pEnemyManager);
 	*gameState = MENUOPEN;
 	allParticlesSystems.clear();
 	srand(time(NULL));

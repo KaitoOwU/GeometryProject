@@ -6,6 +6,7 @@
 #include <list>
 
 class EnemyManager;
+class Game;
 
 class Player
 {
@@ -100,4 +101,5 @@ public:
 
 private:
 	int numberOfBalls = 1;
+	Game* game;
 };

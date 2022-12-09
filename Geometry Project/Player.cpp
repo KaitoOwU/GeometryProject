@@ -16,6 +16,7 @@ Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf
 	this->movementSpeed = movementSpeed;
 	this->activeWindow = window;
 	this->pEnemyManager = pEnemyManager;
+	this->game = game;
 }
 
 Player::~Player()
@@ -30,6 +31,7 @@ void Player::ComputeIfNextLevel()
 	if (currentXP >= xpRequired[currentLvl + 1]) {
 		currentLvl++;
 		currentXP -= xpRequired[currentLvl];
+		game->OpenUpgradeMenu();
 	}
 }
 
@@ -223,6 +225,7 @@ void Player::DetectProjectilCollision()
 					it = circleProjList.erase(it);
 					(*it2).enemyDamageCoolDown = 0.5f;
 					(*it2).pEnemyHealth.TakeDamage(baseDamage * damageMultiplier);
+					(*it2).shape.setFillColor(sf::Color::Red);
 				}
 				return;
 			}
@@ -246,6 +249,7 @@ void Player::DetectProjectilCollision()
 				{
 					(*it4).enemyDamageCoolDown = 0.5f;
 					(*it4).pEnemyHealth.TakeDamage(baseDamage * damageMultiplier);
+					(*it4).shape.setFillColor(sf::Color::Red);
 					(*it3)->health -= baseDamage * damageMultiplier;
 
 					if ((*it3)->health <= 0)
