@@ -31,7 +31,7 @@ void Player::ComputeIfNextLevel()
 	if (currentXP >= xpRequired[currentLvl + 1]) {
 		currentLvl++;
 		currentXP -= xpRequired[currentLvl];
-		game->OpenUpgradeMenu();
+		pGame->OpenUpgradeMenu();
 	}
 }
 
