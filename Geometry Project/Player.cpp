@@ -3,7 +3,7 @@
 #include <iostream>
 #include <cmath>
 
-Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window)
+Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window, Game* game)
 {
 	sf::CircleShape shape;
 	shape.setRadius(size);
@@ -14,6 +14,7 @@ Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf
 	this->shape = shape;
 	this->movementSpeed = movementSpeed;
 	this->activeWindow = window;
+	this->game = game;
 }
 
 Player::~Player()
@@ -28,6 +29,7 @@ void Player::ComputeIfNextLevel()
 	if (currentXP >= xpRequired[currentLvl + 1]) {
 		currentLvl++;
 		currentXP -= xpRequired[currentLvl];
+		game->OpenUpgradeMenu();
 	}
 }
 

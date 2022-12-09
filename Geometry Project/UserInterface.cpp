@@ -214,7 +214,7 @@ void UserInterface::CheckClick(sf::Vector2i mousePosition, sf::RenderWindow& win
 	}
 }
 
-void UserInterface::UpdateGUI(float& currentHealth, float& maxHealth, float& currentXP, float& xpForNextLevel, float& level, float* score){
+void UserInterface::UpdateGUI(float& currentHealth, float& maxHealth, float& currentXP, float& xpForNextLevel, int& level, float* score){
 	if (maxHealth <= 0 || xpForNextLevel <= 0) return;
 	std::list<sf::RectangleShape>::iterator it = rectShapesGUI.begin();
 	it++;

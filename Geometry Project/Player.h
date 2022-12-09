@@ -5,6 +5,8 @@
 #include <map>
 #include <list>
 
+class Game;
+
 class Player
 {
 public:
@@ -76,7 +78,7 @@ public:
 
 	bool canMove = true;
 
-	Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window);
+	Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window, Game* game);
 	~Player();
 
 	void ComputeIfNextLevel();
@@ -93,4 +95,5 @@ public:
 
 private:
 	int numberOfBalls = 1;
+	Game* game;
 };

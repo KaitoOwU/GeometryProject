@@ -7,7 +7,7 @@ Game::Game(sf::RenderWindow* window)
 	ui = new UserInterface(this);
 	renderWindow = window;
 	score = new float(0.f);
-	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, window);
+	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, window, this);
 	pEnemyManager = new EnemyManager(window);
 	pInputManager = new InputManager(this);
 }
@@ -87,8 +87,8 @@ void Game::Update(float& deltaTime)
 void Game::LaunchGame()
 {
 	*gameState = GAMESTATE::PLAYING;
-	//ui->UpdateGUI(pPlayer->health, pPlayer->maxHealth, 
-	//pPlayer->currentXP, pPlayer->xpforNextLevel, pPlayer->currentLevel, score);
+	ui->UpdateGUI(pPlayer->health, pPlayer->maxHealth, 
+	pPlayer->currentXP, pPlayer->xpRequired[pPlayer->currentLvl + 1], pPlayer->currentLvl, score);
 }
 
 void Game::CloseGame()
