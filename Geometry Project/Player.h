@@ -41,7 +41,6 @@ public:
 	ActiveProjectileType projectileType = ActiveProjectileType::Circle;
 
 	EnemyManager* pEnemyManager = nullptr;
-	Game* pGame = nullptr;
 
 
 	float maxHealth = 100.f;
@@ -102,5 +101,5 @@ public:
 
 private:
 	int numberOfBalls = 1;
-	Game* game;
+	Game* pGame;
 };
