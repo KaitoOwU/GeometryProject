@@ -4,7 +4,7 @@
 #include <cmath>
 #include "EnemyManager.h"
 
-Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window, EnemyManager* pEnemyManager)
+Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window, EnemyManager* pEnemyManager, Game* pGame)
 {
 	sf::CircleShape shape;
 	shape.setRadius(size);
@@ -16,6 +16,7 @@ Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf
 	this->movementSpeed = movementSpeed;
 	this->activeWindow = window;
 	this->pEnemyManager = pEnemyManager;
+	this->pGame = pGame;
 }
 
 Player::~Player()
@@ -223,6 +224,7 @@ void Player::DetectProjectilCollision()
 					it = circleProjList.erase(it);
 					(*it2).enemyDamageCoolDown = 0.5f;
 					(*it2).pEnemyHealth.TakeDamage(baseDamage * damageMultiplier);
+					pGame->EnemyTakingDamage(it2->shape.getPosition());
 					(*it2).shape.setFillColor(sf::Color::Red);
 				}
 				return;
@@ -247,6 +249,7 @@ void Player::DetectProjectilCollision()
 				{
 					(*it4).enemyDamageCoolDown = 0.5f;
 					(*it4).pEnemyHealth.TakeDamage(baseDamage * damageMultiplier);
+					pGame->EnemyTakingDamage(it4->shape.getPosition());
 					(*it4).shape.setFillColor(sf::Color::Red);
 					(*it3)->health -= baseDamage * damageMultiplier;
 
