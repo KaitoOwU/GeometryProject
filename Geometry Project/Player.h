@@ -36,8 +36,8 @@ public:
 	float movementSpeed;
 	sf::RenderWindow* activeWindow = nullptr;
 	float shootCooldown = 1.0f;
-	std::list<PlayerCircleProjectile*> circleProjList;
-	std::list<PlayerTriangleProjectile*> triangleProjList;
+	std::list<PlayerCircleProjectile> circleProjList;
+	std::list<PlayerTriangleProjectile> triangleProjList;
 	ActiveProjectileType projectileType = ActiveProjectileType::Circle;
 
 	EnemyManager* pEnemyManager = nullptr;
