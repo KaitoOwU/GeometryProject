@@ -223,6 +223,7 @@ void Player::DetectProjectilCollision()
 					it = circleProjList.erase(it);
 					(*it2).enemyDamageCoolDown = 0.5f;
 					(*it2).pEnemyHealth.TakeDamage(baseDamage * damageMultiplier);
+					(*it2).shape.setFillColor(sf::Color::Red);
 				}
 				return;
 			}
@@ -246,6 +247,7 @@ void Player::DetectProjectilCollision()
 				{
 					(*it4).enemyDamageCoolDown = 0.5f;
 					(*it4).pEnemyHealth.TakeDamage(baseDamage * damageMultiplier);
+					(*it4).shape.setFillColor(sf::Color::Red);
 					(*it3)->health -= baseDamage * damageMultiplier;
 
 					if ((*it3)->health <= 0)

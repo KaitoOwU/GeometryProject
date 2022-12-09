@@ -31,6 +31,8 @@ void EnemyManager::SpawnEnemy(int amount)
 
 		Enemy newEnemy = enemyPrefab[enemyIndex];
 		newEnemy.shape.setFillColor(enemyColor[colorIndex]);
+		newEnemy.initColor = enemyColor[colorIndex];
+
 		sf::Vector2f position;
 		if (rand()%2 == 0)
 		{
@@ -76,6 +78,7 @@ void EnemyManager::WaveManager(float &deltaTime)
 void EnemyManager::EnemyManagerUpdate(Player *pPlayer, float &deltaTime)
 {
 	WaveManager(deltaTime);
+	DamageClipingManager(deltaTime);
 
 	if (enemyList.size() <= 0) {
 		return;
@@ -135,5 +138,26 @@ void EnemyManager::OnPlayerDeath(Player* player)
 
 	enemyList.clear();
 
+}
+
+
+
+void EnemyManager::DamageClipingManager(float& deltaTime)
+{
+	std::list<Enemy>::iterator it = enemyList.begin();
+	while (it != enemyList.end())
+	{
+		if (it->shape.getFillColor() == sf::Color::Red)
+		{
+			it->damageHit -= deltaTime;
+			if (it->damageHit <= 0)
+			{
+				it->damageHit = it->contDamageHit;
+				it->shape.setFillColor(it->initColor);
+			}
+
+		}
+		it++;
+	}
 }
 
