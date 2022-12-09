@@ -1,10 +1,11 @@
 #include "EnemyManager.h"
+#include "Game.h"
 
-EnemyManager::EnemyManager(sf::RenderWindow* window, ExpManager* pExpManager)
+EnemyManager::EnemyManager(sf::RenderWindow* window, ExpManager* pExpManager, Game* pGame)
 {
 	this->activeWindow = window;
 	this->pExpManager = pExpManager;
-
+	this->pGame = pGame;
 	
 	enemyPrefab.clear();
 	enemyPrefab.push_back(Enemy(20, {0,0}, 4, 10.0f, 80.0f, 1.0f, 10.0f,300, pExpManager)); // square enemy
@@ -101,6 +102,7 @@ void EnemyManager::EnemyManagerUpdate(Player *pPlayer, float &deltaTime)
 			{
 				(*it).pEnemyStats.attackSpeed = it->consAttackSpeed;
 				pPlayer->health -= it->pEnemyStats.damage;
+				pGame->HeroTakingDamage();
 			}
 			it++;
 		}
