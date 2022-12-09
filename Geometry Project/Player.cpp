@@ -80,16 +80,16 @@ void Player::Shoot(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime) 
 			target = target - playerPos;
 			sf::Vector2f projectileDir = Normalize(target);
 
-			PlayerCircleProjectile* proj = new PlayerCircleProjectile(projectileDir, &deltaTime);
-			proj->shape.setFillColor(sf::Color::Magenta);
-			proj->shape.setRadius(10.f);
-			proj->shape.setPosition(shape.getPosition());
+			PlayerCircleProjectile proj = PlayerCircleProjectile(projectileDir, &deltaTime);
+			proj.shape.setFillColor(sf::Color::Magenta);
+			proj.shape.setRadius(10.f);
+			proj.shape.setPosition(shape.getPosition());
 			this->circleProjList.push_back(proj);
 			
 			for (int i = 1; i < numberOfBalls; i++) {
-				PlayerCircleProjectile* proj = new PlayerCircleProjectile(projectileDir, &deltaTime);
-				proj->shape.setFillColor(sf::Color::Magenta);
-				proj->shape.setRadius(10.f);
+				PlayerCircleProjectile proj = PlayerCircleProjectile(projectileDir, &deltaTime);
+				proj.shape.setFillColor(sf::Color::Magenta);
+				proj.shape.setRadius(10.f);
 				sf::Vector2f spawnPos;
 				if (abs(target.x) > abs(target.y)) {
 					spawnPos = { shape.getPosition().x, shape.getPosition().y + 25 * i };
@@ -97,7 +97,7 @@ void Player::Shoot(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime) 
 				else {
 					spawnPos = { shape.getPosition().x + 25 * i , shape.getPosition().y };
 				}
-				proj->shape.setPosition(spawnPos);
+				proj.shape.setPosition(spawnPos);
 				this->circleProjList.push_back(proj);
 			}
 			break;
@@ -109,11 +109,11 @@ void Player::Shoot(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime) 
 
 			shootCooldown = 3.f;
 
-			PlayerTriangleProjectile* proj = new PlayerTriangleProjectile(&deltaTime);
-			proj->shape.setFillColor(sf::Color::Magenta);
-			proj->shape.setPosition(shape.getPosition());
-			proj->shape.setPointCount(3);
-			proj->shape.setRadius(15.f);
+			PlayerTriangleProjectile proj = PlayerTriangleProjectile(&deltaTime);
+			proj.shape.setFillColor(sf::Color::Magenta);
+			proj.shape.setPosition(shape.getPosition());
+			proj.shape.setPointCount(3);
+			proj.shape.setRadius(15.f);
 
 			triangleProjList.push_back(proj);
 			std::cout << triangleProjList.size();
@@ -160,9 +160,9 @@ void Player::UpdateProjectile(float& deltaTime) {
 	case Circle: {
 		auto it = circleProjList.begin();
 		while (it != circleProjList.end()) {
-			(*it)->shape.move(((*it)->direction) / 4.f);
-			(*it)->lifeDuration -= deltaTime;
-			if ((*it)->lifeDuration <= 0) {
+			(*it).shape.move(((*it).direction) / 4.f);
+			(*it).lifeDuration -= deltaTime;
+			if ((*it).lifeDuration <= 0) {
 				it = circleProjList.erase(it);
 				continue;
 			}
@@ -174,11 +174,11 @@ void Player::UpdateProjectile(float& deltaTime) {
 		auto it = triangleProjList.begin();
 		while (it != triangleProjList.end()) {
 			sf::Vector2f target = (sf::Vector2f) sf::Mouse::getPosition(*activeWindow);
-			sf::Vector2f trianglePos = (*it)->shape.getPosition();
+			sf::Vector2f trianglePos = (*it).shape.getPosition();
 			target = target - trianglePos;
 			sf::Vector2f projectileDir = Normalize(target);
 			
-			(*it)->shape.move(projectileDir / 10.f);
+			(*it).shape.move(projectileDir / 10.f);
 			it++;
 		}
 		return;
@@ -190,13 +190,13 @@ void Player::DisplayProjectile(sf::RenderWindow& window)
 {
 	auto it = circleProjList.begin();
 	while (it != circleProjList.end()) {
-		window.draw((*it)->shape);
+		window.draw((*it).shape);
 		it++;
 	}
 
 	auto it2 = triangleProjList.begin();
 	while (it2 != triangleProjList.end()) {
-		window.draw((*it2)->shape);
+		window.draw((*it2).shape);
 		it2++;
 	}
 }
@@ -212,13 +212,13 @@ void Player::DetectProjectilCollision()
 		return;
 
 
-	std::list<PlayerCircleProjectile*>::iterator it = circleProjList.begin();
+	std::list<PlayerCircleProjectile>::iterator it = circleProjList.begin();
 	while (it != circleProjList.end())
 	{
 		std::list<Enemy>::iterator it2 = pEnemyManager->enemyList.begin();
 		while (it2 != pEnemyManager->enemyList.end())
 		{
-			if (IsOverlappingCircleOnCircle((*it)->shape.getPosition(), (*it)->shape.getRadius(), (*it2).shape.getPosition(), (*it2).shape.getRadius()))
+			if (IsOverlappingCircleOnCircle((*it).shape.getPosition(), (*it).shape.getRadius(), (*it2).shape.getPosition(), (*it2).shape.getRadius()))
 			{
 				if ((*it2).enemyDamageCoolDown <= 0)
 				{
@@ -238,13 +238,13 @@ void Player::DetectProjectilCollision()
 		it++;
 	}
 
-	std::list<PlayerTriangleProjectile*>::iterator it3 = triangleProjList.begin();
+	std::list<PlayerTriangleProjectile>::iterator it3 = triangleProjList.begin();
 	while (it3 != triangleProjList.end())
 	{
 		std::list<Enemy>::iterator it4 = pEnemyManager->enemyList.begin();
 		while (it4 != pEnemyManager->enemyList.end())
 		{
-			if (IsOverlappingCircleOnCircle((*it3)->shape.getPosition(), (*it3)->shape.getRadius(), (*it4).shape.getPosition(), (*it4).shape.getRadius()))
+			if (IsOverlappingCircleOnCircle((*it3).shape.getPosition(), (*it3).shape.getRadius(), (*it4).shape.getPosition(), (*it4).shape.getRadius()))
 			{
 				if ((*it4).enemyDamageCoolDown <= 0)
 				{
@@ -252,9 +252,9 @@ void Player::DetectProjectilCollision()
 					(*it4).pEnemyHealth.TakeDamage(baseDamage * damageMultiplier);
 					pGame->EnemyTakingDamage(it4->shape.getPosition());
 					(*it4).shape.setFillColor(sf::Color::Red);
-					(*it3)->health -= baseDamage * damageMultiplier;
+					(*it3).health -= baseDamage * damageMultiplier;
 
-					if ((*it3)->health <= 0)
+					if ((*it3).health <= 0)
 					{
 						it3 = triangleProjList.erase(it3);
 					}
