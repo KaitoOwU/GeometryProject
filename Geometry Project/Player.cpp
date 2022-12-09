@@ -16,6 +16,7 @@ Player::Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf
 	this->movementSpeed = movementSpeed;
 	this->activeWindow = window;
 	this->pEnemyManager = pEnemyManager;
+	this->game = game;
 }
 
 Player::~Player()
@@ -30,6 +31,7 @@ void Player::ComputeIfNextLevel()
 	if (currentXP >= xpRequired[currentLvl + 1]) {
 		currentLvl++;
 		currentXP -= xpRequired[currentLvl];
+		game->OpenUpgradeMenu();
 	}
 }
 

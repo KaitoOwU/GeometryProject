@@ -99,8 +99,8 @@ void Game::Update(float& deltaTime)
 void Game::LaunchGame()
 {
 	*gameState = GAMESTATE::PLAYING;
-	ApplyGUIChanges();
-	srand(time(NULL));
+	//ui->UpdateGUI(pPlayer->health, pPlayer->maxHealth, 
+	//pPlayer->currentXP, pPlayer->xpforNextLevel, pPlayer->currentLevel, score);
 }
 
 void Game::CloseGame()
