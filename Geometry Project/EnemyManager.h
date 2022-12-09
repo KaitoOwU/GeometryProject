@@ -24,7 +24,7 @@ public:
 	bool canSpawn = true;
 
 	float currentWaveTime = 0.f;
-	int initEnemyWave = 2;
+	int initEnemyWave = 4;
 	float enemyMultiplicator = 1.5f;
 	int maxEnemyPerWave = 20;
 	float maxTime = 30;

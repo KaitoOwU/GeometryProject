@@ -8,9 +8,9 @@ EnemyManager::EnemyManager(sf::RenderWindow* window, ExpManager* pExpManager, Ga
 	this->pGame = pGame;
 	
 	enemyPrefab.clear();
-	enemyPrefab.push_back(Enemy(20, {0,0}, 4, 10.0f, 80.0f, 1.0f, 10.0f,300, pExpManager)); // square enemy
-	enemyPrefab.push_back(Enemy(25, {0,0}, 6, 15.0f, 100.0f, 1.0f, 10.0f,200, pExpManager)); // hexagone enemy
-	enemyPrefab.push_back(Enemy(30, {0,0}, 8, 20.0f, 120.0f, 1.0f, 10.0f,100, pExpManager)); // hoctogone enemy
+	enemyPrefab.push_back(Enemy(20, {0,0}, 4, 10.0f, 80.0f, 1.0f, 10.0f,1, pExpManager)); // square enemy
+	enemyPrefab.push_back(Enemy(25, {0,0}, 6, 15.0f, 100.0f, 1.0f, 10.0f,2, pExpManager)); // hexagone enemy
+	enemyPrefab.push_back(Enemy(30, {0,0}, 8, 20.0f, 120.0f, 1.0f, 10.0f,3, pExpManager)); // hoctogone enemy
 
 
 	enemyList.clear();
@@ -97,9 +97,9 @@ void EnemyManager::EnemyManagerUpdate(Player *pPlayer, float &deltaTime)
 		(*it).shape.setPosition(sf::Vector2f{ (*it).shape.getPosition().x + target.x * deltaTime * (*it).pEnemyStats.moveSpeed, (*it).shape.getPosition().y + target.y * deltaTime * (*it).pEnemyStats.moveSpeed });
 		if (IsOverlappingCircleOnCircle((*it).shape.getPosition(), (*it).shape.getRadius(), pPlayer->shape.getPosition(), pPlayer->shape.getRadius()))
 		{
-			if ((*it).pEnemyStats.attackSpeed <= 0)
+			if (pPlayer->currentInvincibility <= 0) //(*it).pEnemyStats.attackSpeed <= 0 c'était très bien comme ça mais on me pète les ***** (c'est un pointeur de pointeur de pointeur de pointeur de pointeur)
 			{
-				(*it).pEnemyStats.attackSpeed = it->consAttackSpeed;
+				pPlayer->currentInvincibility = pPlayer->invincibility;				//(*it).pEnemyStats.attackSpeed = it->consAttackSpeed;
 				pPlayer->health -= it->pEnemyStats.damage;
 				pGame->HeroTakingDamage();
 			}

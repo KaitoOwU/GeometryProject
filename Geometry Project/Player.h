@@ -36,6 +36,8 @@ public:
 	float movementSpeed;
 	sf::RenderWindow* activeWindow = nullptr;
 	float shootCooldown = 1.0f;
+	float invincibility = 0.5f;
+	float currentInvincibility = 0.5f;
 	std::list<PlayerCircleProjectile> circleProjList;
 	std::list<PlayerTriangleProjectile> triangleProjList;
 	ActiveProjectileType projectileType = ActiveProjectileType::Circle;
@@ -45,9 +47,10 @@ public:
 
 	float maxHealth = 100.f;
 	float health = maxHealth;
-	float baseDamage = 3.f;
+	float baseDamage = 7.f;
 	float damageMultiplier = 1.f;
 	float speedMultiplier = 1.f;
+;
 	Mutation currentMutation = Mutation::MonoShot;
 
 	int currentLvl = 1;
@@ -96,6 +99,7 @@ public:
 
 	void UpdateProjectile(float& deltaTime);
 	void DisplayProjectile(sf::RenderWindow& window);
+	void UpdatePlayer(float& deltaTime);
 
 	void DetectProjectilCollision();
 

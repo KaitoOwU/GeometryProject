@@ -40,7 +40,7 @@ void ExpManager::ExpTrackPlayer(Player* pPlayer, float& deltaTime)
 
 		if (IsOverlappingCircleOnCircle((*it).shape.getPosition(), (*it).shape.getRadius(), pPlayer->shape.getPosition(), pPlayer->shape.getRadius()))
 		{
-			pGame->IncreaseXP();
+			pGame->IncreaseXP(it->expValue);
 			it = experienceOrbList.erase(it);
 		}
 		else

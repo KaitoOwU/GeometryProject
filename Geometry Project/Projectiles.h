@@ -22,7 +22,7 @@ public:
 
 	sf::CircleShape shape;
 	sf::Vector2f direction = { 0, 0 };
-	float health = 20.f;
+	float health = 150.f;
 
 private:
 	float* deltaTime;
