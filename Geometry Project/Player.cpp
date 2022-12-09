@@ -28,9 +28,9 @@ void Player::ComputeIfNextLevel()
 	if (xpRequired.find(currentLvl + 1) == xpRequired.end())
 		return;
 
-	if (currentXP >= xpRequired[currentLvl + 1]) {
-		currentLvl++;
+	if (currentXP >= xpRequired[currentLvl]) {
 		currentXP -= xpRequired[currentLvl];
+		currentLvl++;
 		pGame->OpenUpgradeMenu();
 	}
 }
@@ -225,7 +225,7 @@ void Player::DetectProjectilCollision()
 					it = circleProjList.erase(it);
 					(*it2).enemyDamageCoolDown = 0.5f;
 					(*it2).pEnemyHealth.TakeDamage(baseDamage * damageMultiplier);
-					pGame->EnemyTakingDamage(it2->shape.getPosition());
+					pGame->EnemyDying(it2->shape.getPosition());
 					(*it2).shape.setFillColor(sf::Color::Red);
 				}
 				return;
@@ -250,7 +250,7 @@ void Player::DetectProjectilCollision()
 				{
 					(*it4).enemyDamageCoolDown = 0.5f;
 					(*it4).pEnemyHealth.TakeDamage(baseDamage * damageMultiplier);
-					pGame->EnemyTakingDamage(it4->shape.getPosition());
+					pGame->EnemyDying(it4->shape.getPosition());
 					(*it4).shape.setFillColor(sf::Color::Red);
 					(*it3).health -= baseDamage * damageMultiplier;
 

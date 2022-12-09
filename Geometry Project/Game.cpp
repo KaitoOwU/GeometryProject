@@ -6,7 +6,7 @@ Game::Game(sf::RenderWindow* window)
 	(*gameState) = GAMESTATE::MENUOPEN;
 	renderWindow = window;
 	score = new float(0.f);
-	pExpManager = new ExpManager(window);
+	pExpManager = new ExpManager(window, this);
 	pEnemyManager = new EnemyManager(window, pExpManager, this);
 	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, window, pEnemyManager, this);
 	pInputManager = new InputManager(this);
@@ -98,9 +98,9 @@ void Game::Update(float& deltaTime)
 
 void Game::LaunchGame()
 {
+	srand(time(NULL));
 	*gameState = GAMESTATE::PLAYING;
-	//ui->UpdateGUI(pPlayer->health, pPlayer->maxHealth, 
-	//pPlayer->currentXP, pPlayer->xpforNextLevel, pPlayer->currentLevel, score);
+	ApplyGUIChanges();
 }
 
 void Game::CloseGame()
@@ -160,27 +160,22 @@ void Game::UpgradePlayer(UPGRADES upgrade)
 {
 	*gameState = GAMESTATE::PLAYING;
 	sf::Color color;
-	//Insert upgrade function here (KEVIN)
 	switch (upgrade)
 	{
 	case SPEED:
-		std::cout << "Speed upgraded" << std::endl;
 		pPlayer->speedMultiplier *= 1.05f;
 		color = sf::Color::Yellow;
 		break;
 	case DAMAGE:
-		std::cout << "Damage upgraded" << std::endl;
 		pPlayer->damageMultiplier *= 1.05f;
 		color = sf::Color::Blue;
 		break;
 	case HEALTH:
-		std::cout << "Health upgraded" << std::endl;
 		pPlayer->maxHealth += 25;
 		pPlayer->health += 25;
 		color = sf::Color::Green;
 		break;
 	case MUTATION:
-		std::cout << "Mutation" << std::endl;
 		pPlayer->MutateToNextState();
 		color = sf::Color::Magenta;
 		break;
@@ -211,16 +206,18 @@ void Game::ApplyGUIChanges()
 		pPlayer->xpRequired[pPlayer->currentLvl], pPlayer->currentLvl, score);
 }
 
-void Game::EnemyTakingDamage(sf::Vector2f enemyPosition)
+void Game::EnemyDying(sf::Vector2f enemyPosition)
 {
 	allParticlesSystems.push_back(ParticleSystem(ENEMY_DAMAGE, enemyPosition,
 		sf::Vector2f{ 0.f, -1.f }));
+	score++;
 }
 
 void Game::HeroTakingDamage()
 {
 	allParticlesSystems.push_back(ParticleSystem(PLAYER_DAMAGE, pPlayer->shape.getPosition() 
-		+ sf::Vector2f{pPlayer->shape.getRadius(), pPlayer->shape.getRadius()}));
+		+ sf::Vector2f{pPlayer->shape.getRadius(), pPlayer->shape.getRadius()})); 
+	ApplyGUIChanges();
 }
 
 void Game::UpdateAllParticleSystems(float& deltaTime)
@@ -258,4 +255,11 @@ void Game::IsPlayerDead()
 		Death();
 	}
 	return;
+}
+
+void Game::IncreaseXP()
+{
+	pPlayer->currentXP++;
+	pPlayer->ComputeIfNextLevel();
+	ApplyGUIChanges();
 }

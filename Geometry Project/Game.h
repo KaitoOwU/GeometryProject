@@ -44,10 +44,11 @@ public:
 	void Death();
 	void OpenUpgradeMenu();
 	void ApplyGUIChanges();
-	void EnemyTakingDamage(sf::Vector2f enemyPosition);
+	void EnemyDying(sf::Vector2f enemyPosition);
 	void HeroTakingDamage();
 	void UpdateAllParticleSystems(float& deltaTime);
 	void DisplayAllParticleSystems(sf::RenderWindow& window);
+	void IncreaseXP();
 	void IsPlayerDead();
 	float* score;
 	GAMESTATE* gameState;

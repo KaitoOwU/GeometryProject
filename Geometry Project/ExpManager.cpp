@@ -1,9 +1,11 @@
 #include "ExpManager.h"
+#include "Game.h"
 
 
-ExpManager::ExpManager(sf::RenderWindow* window)
+ExpManager::ExpManager(sf::RenderWindow* window, Game* game)
 {
 	this->activeWindow = window;
+	this->pGame = game;
 }
 
 ExpManager::~ExpManager()
@@ -38,6 +40,7 @@ void ExpManager::ExpTrackPlayer(Player* pPlayer, float& deltaTime)
 
 		if (IsOverlappingCircleOnCircle((*it).shape.getPosition(), (*it).shape.getRadius(), pPlayer->shape.getPosition(), pPlayer->shape.getRadius()))
 		{
+			pGame->IncreaseXP();
 			it = experienceOrbList.erase(it);
 		}
 		else
