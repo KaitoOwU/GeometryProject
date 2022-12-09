@@ -116,7 +116,6 @@ void Player::Shoot(std::map<sf::Keyboard::Key, bool>& inputs, float& deltaTime) 
 			proj.shape.setRadius(15.f);
 
 			triangleProjList.push_back(proj);
-			std::cout << triangleProjList.size();
 		}
 		}
 	}

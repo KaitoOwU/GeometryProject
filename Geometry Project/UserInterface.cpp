@@ -287,9 +287,9 @@ void UserInterface::InitTextMainMenu()
 	text.setString("Quit");
 	textMainMenu.push_back(text);
 	text.setFillColor(sf::Color::Magenta);
-	text.setCharacterSize(100);
-	text.setPosition(180,150);
-	text.setString("XENOPHOBIA");
+	text.setCharacterSize(85);
+	text.setPosition(140,150);
+	text.setString("GEIMEROPHOBIA");
 	textMainMenu.push_back(text);
 }
 
