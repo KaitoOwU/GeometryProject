@@ -93,7 +93,6 @@ void EnemyManager::EnemyManagerUpdate(Player *pPlayer, float &deltaTime)
 
 		(*it).enemyDamageCoolDown -= deltaTime;
 		(*it).pEnemyStats.attackSpeed -= deltaTime;
-		//(*it).shape.setRotation(it->shape.getRotation() + deltaTime * 20);
 
 		(*it).shape.setPosition(sf::Vector2f{ (*it).shape.getPosition().x + target.x * deltaTime * (*it).pEnemyStats.moveSpeed, (*it).shape.getPosition().y + target.y * deltaTime * (*it).pEnemyStats.moveSpeed });
 		if (IsOverlappingCircleOnCircle((*it).shape.getPosition(), (*it).shape.getRadius(), pPlayer->shape.getPosition(), pPlayer->shape.getRadius()))
@@ -109,6 +108,7 @@ void EnemyManager::EnemyManagerUpdate(Player *pPlayer, float &deltaTime)
 		else if ((*it).pEnemyHealth.currentLife <= 0)
 		{
 			(*it).EnemyDeath();
+			pGame->EnemyDying(it->shape.getPosition());
 			it = enemyList.erase(it);
 		}
 		else
@@ -137,7 +137,6 @@ void EnemyManager::OnPlayerDeath(Player* player)
 {
 	this->canSpawn = false;
 	player->canMove = false;
-
 	enemyList.clear();
 
 }
