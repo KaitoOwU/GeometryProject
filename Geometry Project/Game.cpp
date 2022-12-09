@@ -8,7 +8,7 @@ Game::Game(sf::RenderWindow* window)
 	score = new float(0.f);
 	pExpManager = new ExpManager(window, this);
 	pEnemyManager = new EnemyManager(window, pExpManager, this);
-	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, window, pEnemyManager, this);
+	pPlayer = new Player(25, 200, { 500, 500 }, sf::Color::Red, window, pEnemyManager, this);
 	pInputManager = new InputManager(this);
 	ui = new UserInterface(this);
 	allParticlesSystems.clear();
@@ -43,6 +43,7 @@ void Game::Display(sf::RenderWindow& window)
 		pPlayer->Display(window);
 		pPlayer->DisplayProjectile(window);
 		pPlayer->DetectProjectilCollision();
+
 		IsPlayerDead();
 
 		DisplayAllParticleSystems(window);
@@ -84,6 +85,8 @@ void Game::Update(float& deltaTime)
 		pPlayer->Move(pInputManager->inputs, deltaTime);
 		pPlayer->shootCooldown -= deltaTime;
 		pPlayer->Shoot(pInputManager->inputs, deltaTime);
+		pPlayer->UpdatePlayer(deltaTime);
+
 		UpdateAllParticleSystems(deltaTime);
 		pPlayer->UpdateProjectile(deltaTime);
 	}
@@ -170,11 +173,13 @@ void Game::UpgradePlayer(UPGRADES upgrade)
 		pPlayer->damageMultiplier *= 1.05f;
 		color = sf::Color::Blue;
 		break;
-	case HEALTH:
+	case HEALTH: {
 		pPlayer->maxHealth += 25;
-		pPlayer->health += 25;
+		float newMaxHealth = pPlayer->health + 75;
+		pPlayer->health = Clamp(newMaxHealth, 0, pPlayer->maxHealth);
 		color = sf::Color::Green;
 		break;
+	}
 	case MUTATION:
 		pPlayer->MutateToNextState();
 		color = sf::Color::Magenta;
@@ -257,9 +262,9 @@ void Game::IsPlayerDead()
 	return;
 }
 
-void Game::IncreaseXP()
+void Game::IncreaseXP(int value)
 {
-	pPlayer->currentXP++;
+	pPlayer->currentXP += value;
 	pPlayer->ComputeIfNextLevel();
 	ApplyGUIChanges();
 }
