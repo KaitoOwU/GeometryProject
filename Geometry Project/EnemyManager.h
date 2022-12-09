@@ -5,10 +5,12 @@
 #include "Player.h"
 #include "AllData.h"
 
+class Game;
+
 class EnemyManager
 {
 public:
-	EnemyManager(sf::RenderWindow* window, ExpManager* pExpManager);
+	EnemyManager(sf::RenderWindow* window, ExpManager* pExpManager, Game* pGame);
 	~EnemyManager();
 
 	std::list<Enemy> enemyList;
@@ -17,6 +19,7 @@ public:
 	std::vector < sf::Color> enemyColor = { sf::Color::Blue,sf::Color::Magenta,sf::Color::Cyan,sf::Color::Yellow, sf::Color::White };
 	sf::RenderWindow* activeWindow = nullptr;
 	ExpManager* pExpManager = nullptr;
+	Game* pGame = nullptr;
 
 	bool canSpawn = true;
 

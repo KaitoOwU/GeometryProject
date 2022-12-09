@@ -41,6 +41,7 @@ public:
 	ActiveProjectileType projectileType = ActiveProjectileType::Circle;
 
 	EnemyManager* pEnemyManager = nullptr;
+	Game* pGame = nullptr;
 
 
 	float maxHealth = 100.f;
@@ -82,7 +83,7 @@ public:
 
 	bool canMove = true;
 
-	Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window, EnemyManager* pEnemyManager, Game* game);
+	Player(float size, float movementSpeed, sf::Vector2f initialPosition, sf::Color color, sf::RenderWindow* window, EnemyManager* pEnemyManager, Game* pGame);
 	~Player();
 
 	void ComputeIfNextLevel();
