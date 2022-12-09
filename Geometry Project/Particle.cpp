@@ -3,7 +3,8 @@
 
 
 Particle::Particle(sf::Vector2f position, float speed, float lifeDuration,
-	sf::Vector2f direction, PARTICLE_SYSTEM_TYPE psType, float timeBeforeStart = 0.f)
+	sf::Vector2f direction, PARTICLE_SYSTEM_TYPE psType, 
+	float timeBeforeStart, sf::Color color, float sinDirection)
 {
 	this->speed = speed;
 	this->lifeDuration = lifeDuration;
@@ -11,9 +12,14 @@ Particle::Particle(sf::Vector2f position, float speed, float lifeDuration,
 	this->direction = direction;
 	this->timeBeforeStart = timeBeforeStart;
 	particleType = psType;
+	this->sinDirection = sinDirection;
 	switch (particleType)
 	{
 	case UPGRADE:
+		circleShape.setRadius(5);
+		circleShape.setOrigin(1, 1);
+		circleShape.setPosition(position);
+		circleShape.setFillColor(color);
 		break;
 	case PLAYER_DAMAGE:
 		rectShape = sf::RectangleShape({10.f, 2.f});
@@ -23,6 +29,10 @@ Particle::Particle(sf::Vector2f position, float speed, float lifeDuration,
 		rectShape.setFillColor(sf::Color::Red);
 		break;
 	case ENEMY_DAMAGE:
+		circleShape.setRadius(5);
+		circleShape.setOrigin(1, 1);
+		circleShape.setPosition(position + sf::Vector2f((rand()%51) - 25, (rand() % 51) - 25));
+		circleShape.setFillColor(sf::Color(rand()%256, rand() % 256, rand() % 256));
 		break;
 	default:
 		break;
@@ -44,11 +54,16 @@ void Particle::UpdateParticle(float& deltaTime)
 	switch (particleType)
 	{
 	case UPGRADE:
+		circleShape.setPosition(circleShape.getPosition() 
+			+ direction * speed * deltaTime
+			+ sf::Vector2f(sin(PI * (lifeDuration / timeToLive)) * 0.01f * sinDirection, 0.f));
 		break;
 	case PLAYER_DAMAGE:
 		rectShape.setPosition(rectShape.getPosition() + direction  * speed * deltaTime);
 		break;
 	case ENEMY_DAMAGE:
+		circleShape.setPosition(circleShape.getPosition() + direction * speed * deltaTime + sf::Vector2f(sin(PI * (lifeDuration / timeToLive)) * 0.01f, 0.f));
+		circleShape.setScale(sin(PI * (lifeDuration / timeToLive)), sin(PI * (lifeDuration / timeToLive)));
 		break;
 	default:
 		break;

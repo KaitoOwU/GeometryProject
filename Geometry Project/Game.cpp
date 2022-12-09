@@ -118,7 +118,6 @@ void Game::PauseGame()
 	case PAUSE:
 		*gameState = PLAYING;
 		ApplyGUIChanges();
-		TakeDamage();
 		return;
 	default:
 		return;
@@ -160,29 +159,37 @@ void Game::Mutate()
 void Game::UpgradePlayer(UPGRADES upgrade)
 {
 	*gameState = GAMESTATE::PLAYING;
+	sf::Color color;
 	//Insert upgrade function here (KEVIN)
 	switch (upgrade)
 	{
 	case SPEED:
 		std::cout << "Speed upgraded" << std::endl;
 		pPlayer->speedMultiplier *= 1.05f;
+		color = sf::Color::Yellow;
 		break;
 	case DAMAGE:
 		std::cout << "Damage upgraded" << std::endl;
 		pPlayer->damageMultiplier *= 1.05f;
+		color = sf::Color::Blue;
 		break;
 	case HEALTH:
 		std::cout << "Health upgraded" << std::endl;
 		pPlayer->maxHealth += 25;
 		pPlayer->health += 25;
+		color = sf::Color::Green;
 		break;
 	case MUTATION:
 		std::cout << "Mutation" << std::endl;
 		pPlayer->MutateToNextState();
+		color = sf::Color::Magenta;
 		break;
 	default:
 		break;
 	}
+	allParticlesSystems.push_back(ParticleSystem(UPGRADE,
+		pPlayer->shape.getPosition() + sf::Vector2f{ 0.f,pPlayer->shape.getRadius() * 2 },
+		sf::Vector2f{ 0.f, -1.f }, color));
 	ApplyGUIChanges();
 }
 
@@ -202,13 +209,15 @@ void Game::ApplyGUIChanges()
 {
 	ui->UpdateGUI(pPlayer->health, pPlayer->maxHealth, pPlayer->currentXP,
 		pPlayer->xpRequired[pPlayer->currentLvl], pPlayer->currentLvl, score);
-	if (true)
-	{
-		
-	}
 }
 
-void Game::TakeDamage()
+void Game::EnemyTakingDamage(sf::Vector2f enemyPosition)
+{
+	allParticlesSystems.push_back(ParticleSystem(ENEMY_DAMAGE, enemyPosition,
+		sf::Vector2f{ 0.f, -1.f }));
+}
+
+void Game::HeroTakingDamage()
 {
 	allParticlesSystems.push_back(ParticleSystem(PLAYER_DAMAGE, pPlayer->shape.getPosition() 
 		+ sf::Vector2f{pPlayer->shape.getRadius(), pPlayer->shape.getRadius()}));

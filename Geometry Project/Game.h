@@ -27,7 +27,7 @@ enum UPGRADES {
 class Game
 {
 public:
-	UserInterface* ui = nullptr;
+	UserInterface* ui;
 	Game(sf::RenderWindow* window);
 	~Game();
 	void Display(sf::RenderWindow& window);
@@ -44,12 +44,12 @@ public:
 	void Death();
 	void OpenUpgradeMenu();
 	void ApplyGUIChanges();
-	void TakeDamage();
+	void EnemyTakingDamage(sf::Vector2f enemyPosition);
+	void HeroTakingDamage();
 	void UpdateAllParticleSystems(float& deltaTime);
 	void DisplayAllParticleSystems(sf::RenderWindow& window);
 	void IsPlayerDead();
 	float* score;
-	float test = 1.f;
 	GAMESTATE* gameState;
 	Player* pPlayer;
 	EnemyManager* pEnemyManager;
