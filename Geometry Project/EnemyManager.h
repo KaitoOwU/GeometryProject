@@ -8,19 +8,31 @@
 class EnemyManager
 {
 public:
-	EnemyManager(sf::RenderWindow* window);
+	EnemyManager(sf::RenderWindow* window, ExpManager* pExpManager);
 	~EnemyManager();
 
 	std::list<Enemy> enemyList;
-	std::vector < sf::Vector2f> spawnPoints = {{0,0}, {1000,1000}, {1000,0}, {0,1000}, {500,0}, {0,500}, {1000,500}, {500,1000}};
+	std::vector<Enemy> enemyPrefab;
+
+	std::vector < sf::Color> enemyColor = { sf::Color::Blue,sf::Color::Magenta,sf::Color::Cyan,sf::Color::Yellow, sf::Color::White };
 	sf::RenderWindow* activeWindow = nullptr;
+	ExpManager* pExpManager = nullptr;
 
 	bool canSpawn = true;
 
-	void SpawnEnemy(int amount);
-	void TrackPlayer(Player *player, float &deltaTime);
+	float currentWaveTime = 0.f;
+	int initEnemyWave = 2;
+	float enemyMultiplicator = 1.5f;
+	int maxEnemyPerWave = 20;
+	float maxTime = 30;
+	bool init = true;
+
 	void OnPlayerDeath(Player *player);
+	void EnemyManagerUpdate(Player *player, float &deltaTime);
+	void SpawnEnemy(int amount);
 	void DrawEnemy();
+	void WaveManager(float& deltaTime);
+	void DamageClipingManager(float& deltaTime);
 
 private:
 

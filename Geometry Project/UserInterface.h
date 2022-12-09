@@ -38,8 +38,10 @@ public:
 	void DisplayPauseMenu(sf::RenderWindow& window);
 	void DisplayDeathMenu(sf::RenderWindow& window);
 	void CheckClick(sf::Vector2i mousePosition, sf::RenderWindow& window, Game* game);
-	void UpdateGUI(float& currentHealth, float& maxHealth, float& currentXP, float& xpForNextLevel, int& level, float* score);
+	void UpdateGUI(float& currentHealth, float& maxHealth, float& currentXP,
+		float& xpForNextLevel, int& level, float* score);
 	void UpdateScore(float* newScore);
+	void UpdateUpgradeMenu();
 	sf::Font* gameFont;
 	Game* game;
 

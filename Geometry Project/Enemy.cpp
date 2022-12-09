@@ -1,22 +1,28 @@
 #include "Enemy.h"
 
-Enemy::Enemy(float size, sf::Vector2f spawnPoint, sf::Color color, float maxHealth, float moveSpeed, float attackSpeed, float damage)
+Enemy::Enemy(float size = 0, sf::Vector2f spawnPoint = {0,0}, int numberOfSides = 4, float maxHealth = 100.f, float moveSpeed = 100.f, float attackSpeed = 1.f, float damage = 1.f, float spinSpeed = 200, ExpManager* pExpManager = nullptr)
 {
-	sf::CircleShape shape;
+	sf::CircleShape shape(0.f, numberOfSides);
 	this->shape = shape;
-	this->shape.setFillColor(color);
+	this->shape.setFillColor(sf::Color::Blue);
 	this->shape.setOrigin(sf::Vector2f({ this->shape.getRadius() / 2.f, this->shape.getRadius() / 2.f }));
 	this->shape.setPosition(spawnPoint);
 	this->shape.setRadius(size);
+	this->pExpManager = pExpManager;
+	this->spinSpeed = spinSpeed;
 
 	
+	this->pEnemyHealth = Health(maxHealth);
+	this->pEnemyStats = CharacterStats(moveSpeed, attackSpeed, damage);
 
-	this->pEnemyHealth = new Health(maxHealth);
-	this->pEnemyStats = new CharacterStats(moveSpeed, attackSpeed, damage);
+	this->consAttackSpeed = this->pEnemyStats.attackSpeed;
+}
+
+void Enemy::EnemyDeath()
+{
+	pExpManager->experienceOrbList.push_back(Exp(shape.getPosition(), 10));
 }
 
 Enemy::~Enemy()
 {
-	//delete pEnemyHealth;
-	//delete pEnemyStats;
 }

@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "UserInterface.h"
+#include <list>
 
 enum GAMESTATE
 {
@@ -26,7 +27,7 @@ enum UPGRADES {
 class Game
 {
 public:
-	UserInterface* ui = nullptr;
+	UserInterface* ui;
 	Game(sf::RenderWindow* window);
 	~Game();
 	void Display(sf::RenderWindow& window);
@@ -42,13 +43,20 @@ public:
 	void UpgradePlayer(UPGRADES upgrade);
 	void Death();
 	void OpenUpgradeMenu();
+	void ApplyGUIChanges();
+	void EnemyTakingDamage(sf::Vector2f enemyPosition);
+	void HeroTakingDamage();
+	void UpdateAllParticleSystems(float& deltaTime);
+	void DisplayAllParticleSystems(sf::RenderWindow& window);
+	void IsPlayerDead();
 	float* score;
-	float test = 1.f;
 	GAMESTATE* gameState;
 	Player* pPlayer;
 	EnemyManager* pEnemyManager;
 	InputManager* pInputManager;
+	ExpManager* pExpManager;
 	sf::RenderWindow* renderWindow;
+	std::list<ParticleSystem> allParticlesSystems;
 
 private:
 };

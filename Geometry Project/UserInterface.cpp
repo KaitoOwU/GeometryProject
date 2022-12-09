@@ -33,7 +33,10 @@ void UpgadeHealth(Game* game)
 
 void Mutate(Game* game) 
 {
-	game->Mutate();
+	if ((int)game->pPlayer->currentMutation + 1 <= game->pPlayer->currentLvl / 5.f)
+	{
+		game->Mutate();
+	}
 }
 
 UserInterface::UserInterface(Game* game)
@@ -214,7 +217,9 @@ void UserInterface::CheckClick(sf::Vector2i mousePosition, sf::RenderWindow& win
 	}
 }
 
-void UserInterface::UpdateGUI(float& currentHealth, float& maxHealth, float& currentXP, float& xpForNextLevel, int& level, float* score){
+void UserInterface::UpdateGUI(float& currentHealth, float& maxHealth, float& currentXP,
+	float& xpForNextLevel, int& level, float* score){
+
 	if (maxHealth <= 0 || xpForNextLevel <= 0) return;
 	std::list<sf::RectangleShape>::iterator it = rectShapesGUI.begin();
 	it++;
@@ -224,7 +229,7 @@ void UserInterface::UpdateGUI(float& currentHealth, float& maxHealth, float& cur
 	it++;
 	it->setSize({ it->getOutlineThickness() * 2.f
 	+ 500.f * currentXP/ xpForNextLevel , 50.f });
-	textGUI.end()->setString("LVL: " + std::to_string(level));
+	(--textGUI.end())->setString("LVL: " + std::to_string(level));
 }
 
 void UserInterface::UpdateScore(float* newScore)
@@ -236,6 +241,22 @@ void UserInterface::UpdateScore(float* newScore)
 	it->setCharacterSize(100);
 	it->setPosition(180, 150);
 	it->setString("Score : " + std::to_string((int)*newScore));
+}
+
+void UserInterface::UpdateUpgradeMenu() 
+{
+	std::list<sf::Text>::iterator it = textUpgradeMenu.end();
+	it--;
+	if ((int)game->pPlayer->currentMutation + 1 <= game->pPlayer->currentLvl / 5.f)
+	{
+		it->setPosition({ WINDOW_SIZE.x / 2.f - 70.f,850.f });
+		it->setString("Mutate");
+	}
+	else
+	{
+		it->setPosition({ WINDOW_SIZE.x / 2.f - 180.f,850.f });
+		it->setString("Mutation Impossible");
+	}
 }
 
 void UserInterface::InitRectShapesMainMenu()
@@ -382,9 +403,16 @@ void UserInterface::InitTextUpgradeMenu() {
 	text.setPosition({ 40.f, 600.f });
 	text.setString("Health Upgrade");
 	textUpgradeMenu.push_back(text);
-	//MUTATE
-	text.setPosition({ WINDOW_SIZE.x / 2.f - 70.f,850.f });
-	text.setString("Mutate");
+	if ((int)game->pPlayer->currentMutation + 1 <= game->pPlayer->currentLvl / 5.f)
+	{
+		text.setPosition({ WINDOW_SIZE.x / 2.f - 70.f,850.f });
+		text.setString("Mutate");
+	}
+	else
+	{
+		text.setPosition({ WINDOW_SIZE.x / 2.f - 180.f,850.f });
+		text.setString("Mutation Impossible");
+	}
 	textUpgradeMenu.push_back(text);
 }
 

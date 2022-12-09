@@ -4,12 +4,14 @@ Game::Game(sf::RenderWindow* window)
 {
 	gameState = new GAMESTATE;
 	(*gameState) = GAMESTATE::MENUOPEN;
-	ui = new UserInterface(this);
 	renderWindow = window;
 	score = new float(0.f);
-	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, window, this);
-	pEnemyManager = new EnemyManager(window);
+	pExpManager = new ExpManager(window);
+	pEnemyManager = new EnemyManager(window, pExpManager);
+	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, window, pEnemyManager);
 	pInputManager = new InputManager(this);
+	ui = new UserInterface(this);
+	allParticlesSystems.clear();
 }
 
 Game::~Game()
@@ -34,10 +36,18 @@ void Game::Display(sf::RenderWindow& window)
 	}
 	case GAMESTATE::PLAYING:
 	{
+		//ORDER IN LAYER depending of the order of these functions
+		pExpManager->DrawExperience();
 		pEnemyManager->DrawEnemy();
+
 		pPlayer->Display(window);
 		pPlayer->DisplayProjectile(window);
+		pPlayer->DetectProjectilCollision();
+		IsPlayerDead();
+
+		DisplayAllParticleSystems(window);
 		ui->DisplayGUI(window);
+
 		break;
 	}
 	case GAMESTATE::UPGRADING:
@@ -68,11 +78,13 @@ void Game::Update(float& deltaTime)
 	switch (*gameState)
 	{
 	case PLAYING: {
-		pEnemyManager->TrackPlayer(pPlayer, deltaTime);
+		pEnemyManager->EnemyManagerUpdate(pPlayer, deltaTime);
+		pExpManager->ExpTrackPlayer(pPlayer, deltaTime);
 
 		pPlayer->Move(pInputManager->inputs, deltaTime);
 		pPlayer->shootCooldown -= deltaTime;
 		pPlayer->Shoot(pInputManager->inputs, deltaTime);
+		UpdateAllParticleSystems(deltaTime);
 		pPlayer->UpdateProjectile(deltaTime);
 	}
 	case MENUOPEN:
@@ -87,8 +99,8 @@ void Game::Update(float& deltaTime)
 void Game::LaunchGame()
 {
 	*gameState = GAMESTATE::PLAYING;
-	ui->UpdateGUI(pPlayer->health, pPlayer->maxHealth, 
-	pPlayer->currentXP, pPlayer->xpRequired[pPlayer->currentLvl + 1], pPlayer->currentLvl, score);
+	//ui->UpdateGUI(pPlayer->health, pPlayer->maxHealth, 
+	//pPlayer->currentXP, pPlayer->xpforNextLevel, pPlayer->currentLevel, score);
 }
 
 void Game::CloseGame()
@@ -105,6 +117,7 @@ void Game::PauseGame()
 		return;
 	case PAUSE:
 		*gameState = PLAYING;
+		ApplyGUIChanges();
 		return;
 	default:
 		return;
@@ -116,9 +129,11 @@ void Game::ResetGame()
 	delete pPlayer;
 	delete pEnemyManager;
 	*score = 0;
-	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, renderWindow);
-	pEnemyManager = new EnemyManager(renderWindow);
+	pEnemyManager = new EnemyManager(renderWindow, pExpManager);
+	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, renderWindow, pEnemyManager);
 	*gameState = MENUOPEN;
+	allParticlesSystems.clear();
+	srand(time(NULL));
 }
 
 void Game::UpgadeSpeed()
@@ -144,29 +159,38 @@ void Game::Mutate()
 void Game::UpgradePlayer(UPGRADES upgrade)
 {
 	*gameState = GAMESTATE::PLAYING;
+	sf::Color color;
 	//Insert upgrade function here (KEVIN)
 	switch (upgrade)
 	{
 	case SPEED:
 		std::cout << "Speed upgraded" << std::endl;
 		pPlayer->speedMultiplier *= 1.05f;
+		color = sf::Color::Yellow;
 		break;
 	case DAMAGE:
 		std::cout << "Damage upgraded" << std::endl;
 		pPlayer->damageMultiplier *= 1.05f;
+		color = sf::Color::Blue;
 		break;
 	case HEALTH:
 		std::cout << "Health upgraded" << std::endl;
 		pPlayer->maxHealth += 25;
 		pPlayer->health += 25;
+		color = sf::Color::Green;
 		break;
 	case MUTATION:
 		std::cout << "Mutation" << std::endl;
 		pPlayer->MutateToNextState();
+		color = sf::Color::Magenta;
 		break;
 	default:
 		break;
 	}
+	allParticlesSystems.push_back(ParticleSystem(UPGRADE,
+		pPlayer->shape.getPosition() + sf::Vector2f{ 0.f,pPlayer->shape.getRadius() * 2 },
+		sf::Vector2f{ 0.f, -1.f }, color));
+	ApplyGUIChanges();
 }
 
 void Game::Death()
@@ -178,4 +202,60 @@ void Game::Death()
 void Game::OpenUpgradeMenu()
 {
 	*gameState = GAMESTATE::UPGRADING;
+	ui->UpdateUpgradeMenu();
+}
+
+void Game::ApplyGUIChanges()
+{
+	ui->UpdateGUI(pPlayer->health, pPlayer->maxHealth, pPlayer->currentXP,
+		pPlayer->xpRequired[pPlayer->currentLvl], pPlayer->currentLvl, score);
+}
+
+void Game::EnemyTakingDamage(sf::Vector2f enemyPosition)
+{
+	allParticlesSystems.push_back(ParticleSystem(ENEMY_DAMAGE, enemyPosition,
+		sf::Vector2f{ 0.f, -1.f }));
+}
+
+void Game::HeroTakingDamage()
+{
+	allParticlesSystems.push_back(ParticleSystem(PLAYER_DAMAGE, pPlayer->shape.getPosition() 
+		+ sf::Vector2f{pPlayer->shape.getRadius(), pPlayer->shape.getRadius()}));
+}
+
+void Game::UpdateAllParticleSystems(float& deltaTime)
+{
+	std::list<ParticleSystem>::iterator it = allParticlesSystems.begin();
+	while (it != allParticlesSystems.end())
+	{
+		if (it->IsAllParticlesEmpty())
+		{
+			it = allParticlesSystems.erase(it);
+		}
+		else
+		{
+			it->UpdateParticleSystem(deltaTime);
+			it++;
+		}
+	}
+}
+
+void Game::DisplayAllParticleSystems(sf::RenderWindow& window)
+{
+	std::list<ParticleSystem>::iterator it = allParticlesSystems.begin();
+	while (it != allParticlesSystems.end())
+	{
+		it->DisplayParticleSystem(window); 
+		it++;
+	}
+}
+
+void Game::IsPlayerDead()
+{
+	if (pPlayer->health <= 0)
+	{
+		std::cout << "qksjdkjqs" << std::endl;
+		Death();
+	}
+	return;
 }
