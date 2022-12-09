@@ -25,7 +25,7 @@ public:
 	float enemyMultiplicator = 1.5f;
 	int maxEnemyPerWave = 20;
 	float maxTime = 30;
-	bool init = false;
+	bool init = true;
 
 	void OnPlayerDeath(Player *player);
 	void EnemyManagerUpdate(Player *player, float &deltaTime);

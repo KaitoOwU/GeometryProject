@@ -10,7 +10,7 @@ class Enemy
 {
 public:
 	Enemy();
-	Enemy(float size, sf::Vector2f spawnPoint,int numberOfSides, float maxHealth, float moveSpeed, float attackSpeed, float damage, ExpManager* pExpManager);
+	Enemy(float size, sf::Vector2f spawnPoint,int numberOfSides, float maxHealth, float moveSpeed, float attackSpeed, float damage,float spinSpeed, ExpManager* pExpManager);
 	~Enemy();
 
 	void EnemyDeath();
@@ -21,6 +21,8 @@ public:
 	sf::CircleShape shape;
 
 	float enemyDamageCoolDown = 0.5f;
+	float spinSpeed = 0.f;
+	float consAttackSpeed = 0.f;
 private:
 
 };
