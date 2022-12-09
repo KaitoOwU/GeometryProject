@@ -8,7 +8,7 @@ Game::Game(sf::RenderWindow* window)
 	score = new float(0.f);
 	pExpManager = new ExpManager(window);
 	pEnemyManager = new EnemyManager(window, pExpManager);
-	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, window, pEnemyManager);
+	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, window, pEnemyManager, this);
 	pInputManager = new InputManager(this);
 	ui = new UserInterface(this);
 	allParticlesSystems.clear();
@@ -130,7 +130,7 @@ void Game::ResetGame()
 	delete pEnemyManager;
 	*score = 0;
 	pEnemyManager = new EnemyManager(renderWindow, pExpManager);
-	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, renderWindow, pEnemyManager);
+	pPlayer = new Player(25, 200, { 400, 300 }, sf::Color::Red, renderWindow, pEnemyManager, this);
 	*gameState = MENUOPEN;
 	allParticlesSystems.clear();
 	srand(time(NULL));
