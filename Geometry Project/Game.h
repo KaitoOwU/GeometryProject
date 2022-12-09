@@ -44,7 +44,7 @@ public:
 	void Death();
 	void OpenUpgradeMenu();
 	void ApplyGUIChanges();
-	void EnemyDying(sf::Vector2f enemyPosition);
+	void EnemyDying(sf::Vector2f enemyPosition, float scoreToAdd = 1);
 	void HeroTakingDamage();
 	void UpdateAllParticleSystems(float& deltaTime);
 	void DisplayAllParticleSystems(sf::RenderWindow& window);

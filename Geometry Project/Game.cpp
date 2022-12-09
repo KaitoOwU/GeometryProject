@@ -206,11 +206,11 @@ void Game::ApplyGUIChanges()
 		pPlayer->xpRequired[pPlayer->currentLvl], pPlayer->currentLvl, score);
 }
 
-void Game::EnemyDying(sf::Vector2f enemyPosition)
+void Game::EnemyDying(sf::Vector2f enemyPosition, float scoreToAdd)
 {
 	allParticlesSystems.push_back(ParticleSystem(ENEMY_DAMAGE, enemyPosition,
 		sf::Vector2f{ 0.f, -1.f }));
-	score++;
+	(*score) += scoreToAdd;
 }
 
 void Game::HeroTakingDamage()
